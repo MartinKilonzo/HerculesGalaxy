@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT              += core gui
+QT              += testlib
 CONFIG          += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
@@ -13,7 +14,9 @@ TARGET = TeamPeach
 TEMPLATE = app
 
 DISTFILES += \
-    TeamPeach.pro.user
+    TeamPeach.pro.user \
+    database/TestCSVReader.h.old \
+    database/TestCSVReader.cpp.old
 
 HEADERS += \
     gui/CustomSort.h \
@@ -29,8 +32,9 @@ HEADERS += \
     datamodel/PublicationTreeModel.h \
     datamodel/GrantFundingTreeModel.h \
     datamodel/TeachingTreeModel.h \
-    database/TestCSVReader.h \
-    gui/qcustomplot.h
+    gui/qcustomplot.h \
+    tests/tests.h \
+    tests/TestCSVReader.h
 
 
 SOURCES += \
@@ -48,8 +52,9 @@ SOURCES += \
     datamodel/PublicationTreeModel.cpp \
     datamodel/GrantFundingTreeModel.cpp \
     datamodel/TeachingTreeModel.cpp \
-    database/TestCSVReader.cpp \
-    gui/qcustomplot.cpp
+    gui/qcustomplot.cpp \
+    tests/tests.cpp \
+    tests/TestCSVReader.cpp
 
 FORMS += \
     gui/customsort.ui \
