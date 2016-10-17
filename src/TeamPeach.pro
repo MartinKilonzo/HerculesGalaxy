@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT              += core gui
+QT              += testlib
 CONFIG          += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
@@ -30,7 +31,8 @@ HEADERS += \
     datamodel/GrantFundingTreeModel.h \
     datamodel/TeachingTreeModel.h \
     database/TestCSVReader.h \
-    gui/qcustomplot.h
+    gui/qcustomplot.h \
+    tests/tests.h
 
 
 SOURCES += \
@@ -49,7 +51,8 @@ SOURCES += \
     datamodel/GrantFundingTreeModel.cpp \
     datamodel/TeachingTreeModel.cpp \
     database/TestCSVReader.cpp \
-    gui/qcustomplot.cpp
+    gui/qcustomplot.cpp \
+    tests/tests.cpp
 
 FORMS += \
     gui/customsort.ui \
