@@ -3,7 +3,7 @@
 class TestQString: public QObject
 {
     Q_OBJECT
-private slots:
+    private slots:
     void toUpper();
     /** Amber **/
 
@@ -18,3 +18,12 @@ private slots:
     /** Shanice **/
 
 };
+/*
+class TestGui: public QObject
+{
+    Q_OBJECT
+
+    private slots:
+    void testGui_data();
+    void testGui();
+};*/

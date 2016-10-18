@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
 //        testReader.CSV_READER_TEST_ALL();
         TestQString *test_obj = new TestQString();
         QTest::qExec(test_obj);
+
     }
     else {
         QApplication app(argc, argv);
