@@ -4,8 +4,8 @@
 #include <QTreeView>
 
 #include "gui/mainwindow.h"
-#include "database/TestCSVReader.h"
 #include "tests/tests.h"
+#include "tests/TestCSVReader.h"
 
 using namespace std;
 
@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 //        if (pass) cout << "TEST_08 PASSED !\n";
 //        else cout << "TEST_08 FAILED !\n";
 //        testReader.CSV_READER_TEST_ALL();
-        TestQString *test_obj = new TestQString();
+        TestCSVReader *test_obj = new TestCSVReader();
         QTest::qExec(test_obj);
     }
     else {
