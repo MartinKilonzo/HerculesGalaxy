@@ -6,28 +6,28 @@
 
 class TestCSVReader: public QObject
 {
-    Q_OBJECT
+        Q_OBJECT
 private slots:
-    /* File Loading */
-    void loadGrantsExpandedFile();
-    void loadGrantsClinicalFundingFile();
-    void loadPresentationsExpandedFile();
-    void loadPresentationsFile();
-    void loadProgramTeachingExpandedFile();
-    void loadNoFile();
-    void loadMissingFile();
-    void loadNonCSV();
+        /* File Loading */
+        void loadGrantsExpandedFile();
+        void loadGrantsClinicalFundingFile();
+        void loadPresentationsExpandedFile();
+        void loadPresentationsFile();
+        void loadProgramTeachingExpandedFile();
+        void loadNoFile();
+        void loadMissingFile();
+        void loadNonCSV();
 
-    /* File Parsing */
-    void getPresentationsData();
-    void getProgramTeachingExpandedData();
-    void getNoFileData();
-    void getNonCSVData();
+        /* File Parsing */
+        void getPresentationsData();
+        void getProgramTeachingExpandedData();
+        void getNoFileData();
+        void getNonCSVData();
 
-    /* Date Parsing */
-    void parseMDYDateString();
-    void parseDMYDateString();
-    void parseYMDDateString();
+        /* Date Parsing */
+        void parseMDYDateString();
+        void parseDMYDateString();
+        void parseYMDDateString();
 };
 
 #endif // TESTCSVREADER_H
