@@ -23,11 +23,17 @@ private slots:
         void getProgramTeachingExpandedData();
         void getNoFileData();
         void getNonCSVData();
+        void getSingleCommaData();
+        void getMultipleCommaData();
+        void getObscureCharacterData();
 
         /* Date Parsing */
-        void parseMDYDateString();
-        void parseDMYDateString();
-        void parseYMDDateString();
+        void parseTextMDYDateString();
+        void parseTextDMYDateString();
+        void parseTextYMDDateString();
+        void parseNumberMDYDateString();
+        void parseNumberDMYDateString();
+        void parseNumberYMDDateString();
 };
 
 #endif // TESTCSVREADER_H
