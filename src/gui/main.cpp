@@ -6,10 +6,7 @@
 #include "gui/mainwindow.h"
 #include "tests/tests.h"
 #include "tests/TestCSVReader.h"
-<<<<<<< HEAD
-=======
 #include "tests/TestRecordsManager.h"
->>>>>>> TestRecordsManager
 
 using namespace std;
 
@@ -18,7 +15,7 @@ int main(int argc, char *argv[]) {
 
     if (test) {
         TestCSVReader *testCSVReader = new TestCSVReader();
-        // QTest::qExec(testCSVReader);
+        QTest::qExec(testCSVReader);
         TestRecordsManager *testRecordsManager = new TestRecordsManager();
         QTest::qExec(testRecordsManager);
 
@@ -27,8 +24,6 @@ int main(int argc, char *argv[]) {
         QApplication app(argc, argv);
         MainWindow w;
         w.show();
-
->>>>>>> TestRecordsManager
         return app.exec();
     }
 }

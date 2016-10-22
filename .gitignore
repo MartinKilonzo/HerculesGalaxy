@@ -259,7 +259,6 @@ nbproject/
 
 # Qt Creator
 *.pro.user*
-*.pro
 **/build-*
 *.dat
 *.autosave
