@@ -35,7 +35,8 @@ HEADERS += \
     gui/qcustomplot.h \
     tests/tests.h \
     tests/TestCSVReader.h \
-    tests/TestRecordsManager.h
+    tests/TestRecordsManager.h \
+    tests/TestGraph.h
 
 SOURCES += \
     gui/CustomSort.cpp \
@@ -55,7 +56,8 @@ SOURCES += \
     gui/qcustomplot.cpp \
     tests/tests.cpp \
     tests/TestCSVReader.cpp \
-    tests/TestRecordsManager.cpp
+    tests/TestRecordsManager.cpp \
+    tests/TestGraph.cpp
 
 FORMS += \
     gui/customsort.ui \
