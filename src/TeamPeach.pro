@@ -34,7 +34,12 @@ HEADERS += \
     datamodel/TeachingTreeModel.h \
     gui/qcustomplot.h \
     tests/tests.h \
+<<<<<<< HEAD
     tests/TestCSVReader.h
+=======
+    tests/TestCSVReader.h \
+    tests/TestRecordsManager.h
+>>>>>>> TestRecordsManager
 
 
 SOURCES += \
@@ -54,7 +59,12 @@ SOURCES += \
     datamodel/TeachingTreeModel.cpp \
     gui/qcustomplot.cpp \
     tests/tests.cpp \
+<<<<<<< HEAD
     tests/TestCSVReader.cpp
+=======
+    tests/TestCSVReader.cpp \
+    tests/TestRecordsManager.cpp
+>>>>>>> TestRecordsManager
 
 FORMS += \
     gui/customsort.ui \
