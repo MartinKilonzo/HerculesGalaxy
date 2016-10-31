@@ -1,3 +1,6 @@
+#ifndef SESSIONSTATE_H
+#define SESSIONSTATE_H
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -22,3 +25,5 @@ public:
         void save_session_state();
         string toString();
 };
+
+#endif // SESSIONSTATE_H
