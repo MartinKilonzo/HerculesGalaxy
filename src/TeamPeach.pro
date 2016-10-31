@@ -9,7 +9,6 @@ QT              += testlib
 CONFIG          += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
-
 TARGET = TeamPeach
 TEMPLATE = app
 
@@ -36,7 +35,8 @@ HEADERS += \
     tests/tests.h \
     tests/TestCSVReader.h \
     tests/TestRecordsManager.h \
-    tests/TestGraph.h
+    tests/TestGraph.h \
+    gui/SessionState.h
 
 SOURCES += \
     gui/CustomSort.cpp \
@@ -57,6 +57,7 @@ SOURCES += \
     tests/tests.cpp \
     tests/TestCSVReader.cpp \
     tests/TestRecordsManager.cpp \
+    gui/SessionState.cpp \
     tests/TestGraph.cpp
 
 FORMS += \

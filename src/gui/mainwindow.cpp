@@ -23,6 +23,7 @@
 #include "datamodel/PresentationTreeModel.h"
 #include "datamodel/PublicationTreeModel.h"
 #include "datamodel/TeachingTreeModel.h"
+#include "gui/SessionState.h"
 
 #define FUNDORDER_SAVE  "fundsortorder.dat"
 #define PRESORDER_SAVE  "pressortorder.dat"
@@ -33,6 +34,8 @@ std::vector<std::string> MainWindow::GRANTS_MANFIELDS = {"Member Name", "Funding
 std::vector<std::string> MainWindow::PRES_MANFIELDS = {"Member Name", "Date", "Type", "Role", "Title"};
 std::vector<std::string> MainWindow::PUBS_MANFIELDS = {"Member Name", "Type", "Status Date", "Role", "Title"};
 std::vector<std::string> MainWindow::TEACH_MANFIELDS = {"Member Name", "Start Date", "Program"};
+
+SessionState session = SessionState();
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow),
@@ -87,9 +90,20 @@ MainWindow::MainWindow(QWidget *parent) :
 
     dateChanged = {false, false, false, false};
 
+    // Load the saved session (if it exists)
+    session.load_session_state();
+    std::cout << session.toString() << std::endl;
+    load_teach(session.load_file(TEACH));
+    load_pub(session.load_file(PUBLICATIONS));
+    load_pres(session.load_file(PRESENTATIONS));
+    load_fund(session.load_file(FUNDING));
 }
 
 MainWindow::~MainWindow() {
+  // Save the session state
+    session.save_session_state();
+
+    // Destroy UI elements
     delete ui;
 
     delete fundTree;
@@ -130,6 +144,8 @@ void MainWindow::on_actionLoad_file_triggered() {
             ++it;
         }
     }
+
+
 }
 
 
@@ -949,6 +965,7 @@ void MainWindow::on_teach_load_file_clicked() {
 }
 
 bool MainWindow::load_teach(QString path, bool multi_file) {
+    if (path == "") return false;
     if (!checkFile(TEACH, path)) {
         // enable gui elements
         ui->teach_sort->setEnabled(true);
@@ -982,6 +999,8 @@ bool MainWindow::load_teach(QString path, bool multi_file) {
         makeTree(TEACH);
         ui->teach_file_label->setText(teachPath);
 
+        // Save the file path to the session state
+        session.save_file(TEACH, path);
         return true;
     } else {
         if (!multi_file) {
@@ -1000,6 +1019,7 @@ void MainWindow::on_pub_load_file_clicked() {
 }
 
 bool MainWindow::load_pub(QString path, bool multi_file) {
+    if (path == "") return false;
     if (!checkFile(PUBLICATIONS, path)) {
         // enable gui elements
         ui->pub_sort->setEnabled(true);
@@ -1033,6 +1053,8 @@ bool MainWindow::load_pub(QString path, bool multi_file) {
         makeTree(PUBLICATIONS);
         ui->pub_file_label->setText(pubPath);
 
+        // Save the file path to the session state
+        session.save_file(PUBLICATIONS, path);
         return true;
     } else {
         if (!multi_file) {
@@ -1051,6 +1073,7 @@ void MainWindow::on_pres_load_file_clicked() {
 }
 
 bool MainWindow::load_pres(QString path, bool multi_file) {
+    if (path == "") return false;
     if (!checkFile(PRESENTATIONS, path)) {
         // enable gui elements
         ui->pres_sort->setEnabled(true);
@@ -1084,6 +1107,8 @@ bool MainWindow::load_pres(QString path, bool multi_file) {
         makeTree(PRESENTATIONS);
         ui->pres_file_label->setText(presPath);
 
+        // Save the file path to the session state
+        session.save_file(PRESENTATIONS, path);
         return true;
     } else {
         if (!multi_file) {
@@ -1102,6 +1127,7 @@ void MainWindow::on_fund_load_file_clicked() {
 }
 
 bool MainWindow::load_fund(QString path, bool multi_file) {
+    if (path == "") return false;
     if (!checkFile(FUNDING, path)) {
         // enable gui elements
         ui->fund_sort->setEnabled(true);
@@ -1135,6 +1161,8 @@ bool MainWindow::load_fund(QString path, bool multi_file) {
         makeTree(FUNDING);
         ui->fund_file_label->setText(fundPath);
 
+        // Save the file path to the session state
+        session.save_file(FUNDING, path);
         return true;
     } else {
         if (!multi_file) {
@@ -1555,6 +1583,3 @@ void MainWindow::on_pres_filter_from_textChanged() { refresh(PRESENTATIONS);}
 void MainWindow::on_pres_filter_to_textChanged() { refresh(PRESENTATIONS);}
 void MainWindow::on_fund_filter_from_textChanged() { refresh(FUNDING);}
 void MainWindow::on_fund_filter_to_textChanged() { refresh(FUNDING);}
-
-
-
