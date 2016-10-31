@@ -2,7 +2,8 @@
 
 
 
-SessionState::SessionState() {
+SessionState::SessionState(string newFileName) {
+    fileName = newFileName;
     std::vector<string> filePaths;
 }
 
@@ -44,9 +45,9 @@ void SessionState::save_view() {
 
 }
 
-void SessionState::load_session_state() {
+bool SessionState::load_session_state() {
     std::cout << "Loading ..." << std::endl;
-    QFile file("session.dat");
+    QFile file(fileName);
     if (file.exists()) {
         file.open(QIODevice::ReadOnly);
         QDataStream qds(&file);
@@ -61,11 +62,13 @@ void SessionState::load_session_state() {
         }
     }
     std::cout << "... Loading" << std::endl;
+    if (file.exists()) return true;
+    else return false;
 }
 
-void SessionState::save_session_state() {
+bool SessionState::save_session_state() {
     std::cout << "Saving ..." << std::endl;
-    QFile file("session.dat");
+    QFile file(fileName);
     file.open(QIODevice::WriteOnly);
     QDataStream qds(&file);
     qds << (qint32)filePaths.size();
@@ -74,6 +77,8 @@ void SessionState::save_session_state() {
         qds << QString((*itr).c_str());
     }
     std::cout << "... Saving" << std::endl;
+    if (file.exists()) return true;
+    else return false;
 }
 
 string SessionState::toString() {

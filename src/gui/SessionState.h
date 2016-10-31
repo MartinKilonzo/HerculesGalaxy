@@ -12,6 +12,7 @@
 using namespace std;
 
 class SessionState {
+        string fileName;
         std::vector<string> filePaths;
         void load_filter();
         void load_view();
@@ -20,9 +21,9 @@ class SessionState {
 public:
         SessionState();
         QString load_file(int);
-        void load_session_state();
+        bool load_session_state();
         void save_file(int, QString);
-        void save_session_state();
+        bool save_session_state();
         string toString();
 };
 

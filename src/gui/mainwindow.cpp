@@ -35,7 +35,7 @@ std::vector<std::string> MainWindow::PRES_MANFIELDS = {"Member Name", "Date", "T
 std::vector<std::string> MainWindow::PUBS_MANFIELDS = {"Member Name", "Type", "Status Date", "Role", "Title"};
 std::vector<std::string> MainWindow::TEACH_MANFIELDS = {"Member Name", "Start Date", "Program"};
 
-SessionState session = SessionState();
+SessionState session = SessionState("session.dat");
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent), ui(new Ui::MainWindow),

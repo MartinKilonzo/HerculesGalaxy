@@ -36,7 +36,8 @@ HEADERS += \
     tests/TestCSVReader.h \
     tests/TestRecordsManager.h \
     tests/TestGraph.h \
-    gui/SessionState.h
+    gui/SessionState.h \
+    tests/TestSessionState.h
 
 SOURCES += \
     gui/CustomSort.cpp \
@@ -58,7 +59,8 @@ SOURCES += \
     tests/TestCSVReader.cpp \
     tests/TestRecordsManager.cpp \
     gui/SessionState.cpp \
-    tests/TestGraph.cpp
+    tests/TestGraph.cpp \
+    tests/TestSessionState.cpp
 
 FORMS += \
     gui/customsort.ui \
