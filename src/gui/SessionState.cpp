@@ -3,8 +3,19 @@
 
 
 SessionState::SessionState(string newFileName) {
-    fileName = newFileName;
+    // set the default start year to be 1950
+    startDate = QDate(1950, 1, 1);
+    // set the default end date to be today
+    endDate = QDate::currentDate();
+    fileName = QString(newFileName.c_str());
     std::vector<string> filePaths;
+}
+
+QDate SessionState::load_start_date() {
+    return startDate;
+}
+QDate SessionState::load_end_date() {
+    return endDate;
 }
 
 QString SessionState::load_file(int index) {
@@ -20,6 +31,34 @@ void SessionState::load_filter() {
 
 void SessionState::load_view() {
 
+}
+
+bool SessionState::load_session_state() {
+  std::cout << "Loading ..." << std::endl;
+  QFile file(fileName);
+  if (file.exists()) {
+    file.open(QIODevice::ReadOnly);
+    QDataStream qds(&file);
+    qint32 size;
+    qds >> size;
+    std::cout << "Size: " << size << std::endl;
+    for (int i = 0; i < size; i++) {
+      QString item;
+      qds >> item;
+      std::cout << "Reading: " << i << "\t" << item.toStdString() << std::endl;
+      save_file(i, item);
+    }
+  }
+  std::cout << "... Loading" << std::endl;
+  if (file.exists()) return true;
+  else return false;
+}
+
+void SessionState::save_start_date(QDate date) {
+    startDate = date;
+}
+void SessionState::save_end_date(QDate date) {
+    endDate = date;
 }
 
 void SessionState::save_file(int index, QString path) {
@@ -43,27 +82,6 @@ void SessionState::save_filter() {
 
 void SessionState::save_view() {
 
-}
-
-bool SessionState::load_session_state() {
-    std::cout << "Loading ..." << std::endl;
-    QFile file(fileName);
-    if (file.exists()) {
-        file.open(QIODevice::ReadOnly);
-        QDataStream qds(&file);
-        qint32 size;
-        qds >> size;
-        std::cout << "Size: " << size << std::endl;
-        for (int i = 0; i < size; i++) {
-            QString item;
-            qds >> item;
-            std::cout << "Reading: " << i << "\t" << item.toStdString() << std::endl;
-            save_file(i, item);
-        }
-    }
-    std::cout << "... Loading" << std::endl;
-    if (file.exists()) return true;
-    else return false;
 }
 
 bool SessionState::save_session_state() {

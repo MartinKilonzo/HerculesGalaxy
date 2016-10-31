@@ -2,13 +2,14 @@
 #define TESTSESSIONSTATE_H
 
 #include <QObject>
-#include <QtTest/QtTest>
+#include <QString>
+#include <QTest>
 
 #include "gui/SessionState.h"
 
 using namespace std;
 
-class TestCSVReader: public QObject
+class TestSessionState: public QObject
 {
         Q_OBJECT
 private slots:

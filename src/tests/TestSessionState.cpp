@@ -10,7 +10,7 @@ void TestSessionState::testFileSave() {
 void TestSessionState::testFileLoad() {
     SessionState session = SessionState("../Project Information/TestData/test.dat");
     session.load_session_state();
-    QCOMPARE(session.load_file(0), "test/File/path.csv");
+    QCOMPARE(session.load_file(0), QString("test/File/path.csv"));
 }
 
 void TestSessionState::testStaggeredFileSave() {
@@ -23,14 +23,14 @@ void TestSessionState::testStaggeredFileLoad() {
     SessionState session = SessionState("../Project Information/TestData/test.dat");
     session.load_session_state();
     bool flag = true;
-    for (int i = 0; i < 5) {
-        string filePath = session.load_file(i);
+    for (int i = 0; i < 5; i++) {
+        QString filePath = session.load_file(i);
         if (i == 4 && filePath != "test/File/path.csv") {
-            flag = FALSE;
+            flag = false;
             break;
         }
         else if (filePath != "") {
-            flag = FALSE;
+            flag = false;
             break;
         }
     }
@@ -38,7 +38,6 @@ void TestSessionState::testStaggeredFileLoad() {
 }
 
 void TestSessionState::testMultipleFileSave() {
-    SessionState session = SessionState("../Project Information/TestData/test.dat");
     SessionState session = SessionState("../Project Information/TestData/test.dat");
     for (int i = 0; i < 12; i++) {
         session.save_file(i, "test/File/path.csv");
@@ -50,9 +49,9 @@ void TestSessionState::testMultipleFileLoad() {
     SessionState session = SessionState("../Project Information/TestData/test.dat");
     session.load_session_state();
     bool flag = true;
-    for (int i = 0; i < 12) {
-        string filePath = session.load_file(i);
-        if (string != "test/File/path.csv") {
+    for (int i = 0; i < 12; i++) {
+        QString filePath = session.load_file(i);
+        if (filePath != "test/File/path.csv") {
             flag = false;
             break;
         }
@@ -62,7 +61,6 @@ void TestSessionState::testMultipleFileLoad() {
 
 void TestSessionState::testMultipleStaggeredFileSave() {
     SessionState session = SessionState("../Project Information/TestData/test.dat");
-    SessionState session = SessionState("../Project Information/TestData/test.dat");
     session.save_file(0, "test/File/path.csv");
     session.save_file(4, "test/File/path.csv");
     session.save_file(7, "test/File/path.csv");
@@ -71,17 +69,16 @@ void TestSessionState::testMultipleStaggeredFileSave() {
 
 void TestSessionState::testMultipleStaggeredFileLoad() {
     SessionState session = SessionState("../Project Information/TestData/test.dat");
-    SessionState session = SessionState("../Project Information/TestData/test.dat");
     session.load_session_state();
     bool flag = true;
-    for (int i = 0; i < 8) {
-        string filePath = session.load_file(i);
+    for (int i = 0; i < 8; i++) {
+        QString filePath = session.load_file(i);
         if ((i == 0 || i == 4 || i == 7) && filePath != "test/File/path.csv") {
-            flag = FALSE;
+            flag = false;
             break;
         }
         else if (filePath != "") {
-            flag = FALSE;
+            flag = false;
             break;
         }
     }
@@ -91,11 +88,9 @@ void TestSessionState::testMultipleStaggeredFileLoad() {
 void TestSessionState::testSaveToMissingFile() {
     SessionState session = SessionState("../Project Information/TestData/missingTest.dat");
     QVERIFY(session.save_session_state());
-
 }
 
 void TestSessionState::testLoadFromMissingFile() {
     SessionState session = SessionState("../Project Information/TestData/missingTestFile.dat");
     QVERIFY(!session.save_session_state());
-
 }

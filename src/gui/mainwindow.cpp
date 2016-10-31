@@ -60,19 +60,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->ToDate->setDisplayFormat(dFormat);
 
     // set start year to be 1950
-    QDate startDate(1950, 1, 1);
+    QDate startDateRange(1950, 1, 1);
 
     // set ranges for spinbox
-    ui->FromDate->setDateRange(startDate, QDate::currentDate());
-    ui->ToDate->setDateRange(startDate, QDate::currentDate());
+    ui->FromDate->setDateRange(startDateRange, QDate::currentDate());
+    ui->ToDate->setDateRange(startDateRange, QDate::currentDate());
 
-    // set default dates (1950->current)
+    // Load date range
+    session.load_session_state();
+    QDate startDate = session.load_start_date();
+    QDate endDate = session.load_end_date();
+
     ui->FromDate->setDate(startDate);
     ui->ToDate->setDate(QDate::currentDate());
 
     // set some member variables to the current date values
-    yearStart = 1950;
-    yearEnd = QDate::currentDate().year();
+    // yearStart = 1950;
+    // yearEnd = QDate::currentDate().year();
+    yearStart = startDate.year();
+    yearEnd = endDate.year();
 
     //default print is disabled
     ui->teachPrintButton->setEnabled(false);
@@ -91,8 +97,6 @@ MainWindow::MainWindow(QWidget *parent) :
     dateChanged = {false, false, false, false};
 
     // Load the saved session (if it exists)
-    session.load_session_state();
-    std::cout << session.toString() << std::endl;
     load_teach(session.load_file(TEACH));
     load_pub(session.load_file(PUBLICATIONS));
     load_pres(session.load_file(PRESENTATIONS));
@@ -100,7 +104,7 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow() {
-  // Save the session state
+    // Save the session state
     session.save_session_state();
 
     // Destroy UI elements
@@ -120,9 +124,9 @@ MainWindow::~MainWindow() {
 
 void MainWindow::on_actionLoad_file_triggered() {
     QStringList filePaths = QFileDialog::getOpenFileNames(this,
-                                                          "Select one or more files to load",
-                                                          QDir::currentPath(),
-                                                          tr("CSV (*.csv);; All files (*.*)"));
+            "Select one or more files to load",
+            QDir::currentPath(),
+            tr("CSV (*.csv);; All files (*.*)"));
     if (filePaths.size() > 0) {
         const int NUM_TABS = 4;
         bool all_loaded[NUM_TABS] = {false, false, false, false};
@@ -156,7 +160,7 @@ void MainWindow::on_actionLoad_file_triggered() {
  */
 QString MainWindow::load_file() {
     QString filePath = QFileDialog::getOpenFileName(this, "Open File", QDir::currentPath(),
-                                                    tr("CSV (*.csv);; All files (*.*)"));
+            tr("CSV (*.csv);; All files (*.*)"));
 
     if (!filePath.isEmpty()) {
         return filePath;
@@ -228,6 +232,7 @@ int MainWindow::checkFile(int index, QString filePath) {
                 sortHeaderIndex = teachdb->getHeaderIndex("Start Date");
                 teachData = reader.getData();
                 std::vector<std::vector<std::string>*> f_errs;
+                // TODO: save error fixes to session
                 unsigned int j;
                 for (int i = 0; i < (int) teachData.size(); i++) {
                     for (j = 0; j < TEACH_MANFIELDS.size(); j++) {
@@ -461,11 +466,11 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
         // add default list to member variable
         allFundOrders << defaultOrder;
 
-    {
-        // save the default for the user
-        QSortListIO saveFundSort(FUNDORDER_SAVE);
-        saveFundSort.saveList(allFundOrders);
-    }
+        {
+            // save the default for the user
+            QSortListIO saveFundSort(FUNDORDER_SAVE);
+            saveFundSort.saveList(allFundOrders);
+        }
 
         break;
     case PRESENTATIONS:
@@ -475,11 +480,11 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
         // add default list to member variable
         allPresOrders << defaultOrder;
 
-    {
-        // save the default for the user
-        QSortListIO savePresSort(PRESORDER_SAVE);
-        savePresSort.saveList(allPresOrders);
-    }
+        {
+            // save the default for the user
+            QSortListIO savePresSort(PRESORDER_SAVE);
+            savePresSort.saveList(allPresOrders);
+        }
 
         break;
     case PUBLICATIONS:
@@ -489,11 +494,11 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
         // add default list to member variable
         allPubOrders << defaultOrder;
 
-    {
-        // save the default for the user
-        QSortListIO savePubSort(PUBORDER_SAVE);
-        savePubSort.saveList(allPubOrders);
-    }
+        {
+            // save the default for the user
+            QSortListIO savePubSort(PUBORDER_SAVE);
+            savePubSort.saveList(allPubOrders);
+        }
 
         break;
     case TEACH:
@@ -503,11 +508,11 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
         // add default list to member variable
         allTeachOrders << defaultOrder;
 
-    {
-        // save the default for the user
-        QSortListIO saveTeachSort(FUNDORDER_SAVE);
-        saveTeachSort.saveList(allFundOrders);
-    }
+        {
+            // save the default for the user
+            QSortListIO saveTeachSort(FUNDORDER_SAVE);
+            saveTeachSort.saveList(allFundOrders);
+        }
 
         break;
     }
@@ -522,8 +527,8 @@ void MainWindow::createDefaultSortOrder(int tabIndex) {
  * Returns false when no fields have been edited.
  */
 bool MainWindow::handle_field_errors(std::vector<std::vector<std::string>*>& err,
-                                     std::vector<std::string>& headers,
-                                     std::vector<std::string>& mandatory) {
+    std::vector<std::string>& headers,
+    std::vector<std::string>& mandatory) {
     //Since CSVReader alldata contains completely empty records
     //remove them first.
     std::vector<std::vector<std::string>*>::iterator it;
@@ -652,7 +657,7 @@ void MainWindow::makeTree(int tabIndex) {
     currentView->header()->resizeSections(QHeaderView::Stretch);
 }
 
-void MainWindow::setupPieChart(PieChartWidget* pieChart, QListWidget *pieListWidget, std::vector<std::pair <std::string, double>> pieChartList) {
+void MainWindow::setupPieChart(PieChartWidget* pieChart, QListWidget *pieListWidget, std::vector<std::pair <std::string, double> > pieChartList) {
     // draws the pie graph by sending piechartwidget a vector of name, presentation count
     int pieSize = (int) pieChartList.size();
     QVector<QColor> colorList(pieSize);
@@ -671,7 +676,7 @@ void MainWindow::setupPieChart(PieChartWidget* pieChart, QListWidget *pieListWid
     pieChart->setData(pieChartList, colorList); //passes vector list to piechartwidget
 }
 
-void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std::string, double>> barChartList) {
+void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std::string, double> > barChartList) {
     // create empty bar chart objects:
     QCPBars *yLabels = new QCPBars(barChart->yAxis, barChart->xAxis);
     barChart->addPlottable(yLabels);
@@ -693,17 +698,17 @@ void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std
     QVector<double> count;
 
     //add label list to y axis labels
-    for (int i = 0; i < barSize; i++){
-        ticks << (i+1);
+    for (int i = 0; i < barSize; i++) {
+        ticks << (i + 1);
         ylabels << QString::fromStdString(barChartList[i].first);
-        if (barChartList[i].second>1000000){
-            scaledCount = barChartList[i].second/1000000;
-        } else if (barChartList[i].second>1000){
-            scaledCount = barChartList[i].second/1000;
+        if (barChartList[i].second > 1000000) {
+            scaledCount = barChartList[i].second / 1000000;
+        } else if (barChartList[i].second > 1000) {
+            scaledCount = barChartList[i].second / 1000;
         } else{
             scaledCount = barChartList[i].second;
         }
-        count <<scaledCount;
+        count << scaledCount;
 
         if (maxCount < barChartList[i].second)
             maxCount = barChartList[i].second;
@@ -718,13 +723,13 @@ void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std
     barChart->yAxis->setSubTickCount(0);
     barChart->yAxis->setTickLength(0, 1);
     barChart->yAxis->grid()->setVisible(true);
-    barChart->yAxis->setRange(0, barSize+1);
+    barChart->yAxis->setRange(0, barSize + 1);
 
-    if(maxCount>1000000){
-        maxCount = maxCount/1000000;
+    if(maxCount > 1000000) {
+        maxCount = maxCount / 1000000;
         barChart->xAxis->setLabel("Total (in Millions)");
-    }else if (maxCount>1000){
-        maxCount = maxCount/1000;
+    }else if (maxCount > 1000) {
+        maxCount = maxCount / 1000;
         barChart->xAxis->setLabel("Total (in Thousands)");
     }else{
         barChart->xAxis->setLabel("Total");
@@ -732,7 +737,7 @@ void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std
 
     // setup X Axis
     barChart->xAxis->setAutoTicks(true);
-    barChart->xAxis->setRange(0,maxCount+(maxCount*.05));
+    barChart->xAxis->setRange(0, maxCount + (maxCount * .05));
     barChart->xAxis->setAutoTickLabels(true);
     barChart->xAxis->setAutoTickStep(true);
     barChart->xAxis->grid()->setSubGridVisible(true);
@@ -877,12 +882,12 @@ void MainWindow::on_fund_sort_currentIndexChanged(int index) {
 }
 
 void MainWindow::on_teach_delete_sort_clicked() {
-    if (ui->teach_sort->currentIndex()!=0) {
+    if (ui->teach_sort->currentIndex() != 0) {
         QMessageBox prompt;
         prompt.setText("Are you sure you want to delete " + ui->teach_sort->currentText() + "?");
         prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        if (prompt.exec()==QMessageBox::Yes) {
+        if (prompt.exec() == QMessageBox::Yes) {
             allTeachOrders.removeAt(ui->teach_sort->currentIndex());
             ui->teach_sort->removeItem(ui->teach_sort->currentIndex());
 
@@ -895,12 +900,12 @@ void MainWindow::on_teach_delete_sort_clicked() {
 }
 
 void MainWindow::on_pub_delete_sort_clicked() {
-    if (ui->pub_sort->currentIndex()!=0) {
+    if (ui->pub_sort->currentIndex() != 0) {
         QMessageBox prompt;
         prompt.setText("Are you sure you want to delete " + ui->pub_sort->currentText() + "?");
         prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        if (prompt.exec()==QMessageBox::Yes) {
+        if (prompt.exec() == QMessageBox::Yes) {
             allPubOrders.removeAt(ui->pub_sort->currentIndex());
             ui->pub_sort->removeItem(ui->pub_sort->currentIndex());
 
@@ -913,12 +918,12 @@ void MainWindow::on_pub_delete_sort_clicked() {
 }
 
 void MainWindow::on_pres_delete_sort_clicked() {
-    if (ui->pres_sort->currentIndex()!=0) {
+    if (ui->pres_sort->currentIndex() != 0) {
         QMessageBox prompt;
         prompt.setText("Are you sure you want to delete " + ui->pres_sort->currentText() + "?");
         prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        if (prompt.exec()==QMessageBox::Yes) {
+        if (prompt.exec() == QMessageBox::Yes) {
             allPresOrders.removeAt(ui->pres_sort->currentIndex());
             ui->pres_sort->removeItem(ui->pres_sort->currentIndex());
 
@@ -931,12 +936,12 @@ void MainWindow::on_pres_delete_sort_clicked() {
 }
 
 void MainWindow::on_fund_delete_sort_clicked() {
-    if (ui->fund_sort->currentIndex()!=0) {
+    if (ui->fund_sort->currentIndex() != 0) {
         QMessageBox prompt;
         prompt.setText("Are you sure you want to delete " + ui->fund_sort->currentText() + "?");
         prompt.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        if (prompt.exec()==QMessageBox::Yes) {
+        if (prompt.exec() == QMessageBox::Yes) {
             allFundOrders.removeAt(ui->fund_sort->currentIndex());
             ui->fund_sort->removeItem(ui->fund_sort->currentIndex());
 
@@ -948,14 +953,30 @@ void MainWindow::on_fund_delete_sort_clicked() {
     }
 }
 
-void MainWindow::on_teach_bar_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(1);}
-void MainWindow::on_teach_pie_button_toggled() { ui->teach_graph_stackedWidget->setCurrentIndex(0);}
-void MainWindow::on_pub_bar_button_toggled() { ui->pub_graph_stackedWidget->setCurrentIndex(1);}
-void MainWindow::on_pub_pie_button_toggled() { ui->pub_graph_stackedWidget->setCurrentIndex(0);}
-void MainWindow::on_pres_bar_button_toggled() { ui->pres_graph_stackedWidget->setCurrentIndex(1);}
-void MainWindow::on_pres_pie_button_toggled() { ui->pres_graph_stackedWidget->setCurrentIndex(0);}
-void MainWindow::on_fund_bar_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(1);}
-void MainWindow::on_fund_pie_button_toggled() { ui->fund_graph_stackedWidget->setCurrentIndex(0);}
+void MainWindow::on_teach_bar_button_toggled() {
+    ui->teach_graph_stackedWidget->setCurrentIndex(1);
+}
+void MainWindow::on_teach_pie_button_toggled() {
+    ui->teach_graph_stackedWidget->setCurrentIndex(0);
+}
+void MainWindow::on_pub_bar_button_toggled() {
+    ui->pub_graph_stackedWidget->setCurrentIndex(1);
+}
+void MainWindow::on_pub_pie_button_toggled() {
+    ui->pub_graph_stackedWidget->setCurrentIndex(0);
+}
+void MainWindow::on_pres_bar_button_toggled() {
+    ui->pres_graph_stackedWidget->setCurrentIndex(1);
+}
+void MainWindow::on_pres_pie_button_toggled() {
+    ui->pres_graph_stackedWidget->setCurrentIndex(0);
+}
+void MainWindow::on_fund_bar_button_toggled() {
+    ui->fund_graph_stackedWidget->setCurrentIndex(1);
+}
+void MainWindow::on_fund_pie_button_toggled() {
+    ui->fund_graph_stackedWidget->setCurrentIndex(0);
+}
 
 void MainWindow::on_teach_load_file_clicked() {
     QString path = load_file();
@@ -1177,6 +1198,9 @@ void MainWindow::on_FromDate_dateChanged(const QDate &date) {
     // set the member variable to the new date
     yearStart = date.year();
 
+    // save the new date to the session
+    session.save_start_date(date);
+
     // update end date spinbox to not fall below that year
     ui->ToDate->setMinimumDate(date);
 
@@ -1189,6 +1213,9 @@ void MainWindow::on_FromDate_dateChanged(const QDate &date) {
 void MainWindow::on_ToDate_dateChanged(const QDate &date) {
     // set the member variable to the new date
     yearEnd = date.year();
+
+    // save the new date to the session
+    session.save_end_date(date);
 
     // update end date spinbox to not fall below that year
     ui->ToDate->setMinimumDate(ui->FromDate->date());
@@ -1208,14 +1235,14 @@ void MainWindow::on_categoryTab_currentChanged() {
 
 void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
     QString clickedName = index.data(Qt::DisplayRole).toString();
-    if (clickedName==teachClickedName || index.column()!=0) { return;}
+    if (clickedName == teachClickedName || index.column() != 0) { return; }
 
     std::vector<std::string> parentsList;
     QModelIndex current = index;
     QString name;
     while (true) {
         name = current.data(Qt::DisplayRole).toString();
-        if(name!="") {
+        if(name != "") {
             auto it = parentsList.begin();
             it = parentsList.insert(it, name.toStdString());
         } else {
@@ -1224,12 +1251,12 @@ void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
         current = current.parent();
     }
 
-    if (parentsList.size()!=teachSortOrder.size()) {
+    if (parentsList.size() != teachSortOrder.size()) {
         teachClickedName = clickedName;
-        std::vector<std::string> sortOrder(teachSortOrder.begin(), teachSortOrder.begin()+parentsList.size()+1);
-        std::vector<std::pair <std::string, int>> list =
-                teachdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(TEACH), getFilterEndChar(TEACH));
-        std::vector<std::pair <std::string, double>> chartList;
+        std::vector<std::string> sortOrder(teachSortOrder.begin(), teachSortOrder.begin() + parentsList.size() + 1);
+        std::vector<std::pair <std::string, int> > list =
+            teachdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(TEACH), getFilterEndChar(TEACH));
+        std::vector<std::pair <std::string, double> > chartList;
         for (int i = 0; i < (int) list.size(); i++) {
             chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
         }
@@ -1241,9 +1268,9 @@ void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
 
             setupPieChart(ui->teachPieChart, ui->teachPieList, chartList);
 
-            if (parentsList.size()>1) {
+            if (parentsList.size() > 1) {
                 ui->teachGraphTitle->setText("Total " + clickedName + " Teaching by " +
-                                             QString::fromStdString(teachSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
+                    QString::fromStdString(teachSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
             } else {
                 ui->teachGraphTitle->setText("Total Teaching by " + QString::fromStdString(parentsList[0]));
             }
@@ -1258,14 +1285,14 @@ void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
 
 void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
     QString clickedName = index.data(Qt::DisplayRole).toString();
-    if (clickedName==pubClickedName || index.column()!=0) { return;}
+    if (clickedName == pubClickedName || index.column() != 0) { return; }
 
     std::vector<std::string> parentsList;
     QModelIndex current = index;
     QString name;
     while (true) {
         name = current.data(Qt::DisplayRole).toString();
-        if(name!="") {
+        if(name != "") {
             auto it = parentsList.begin();
             it = parentsList.insert(it, name.toStdString());
         } else {
@@ -1274,12 +1301,12 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
         current = current.parent();
     }
 
-    if (parentsList.size()!=pubSortOrder.size()) {
+    if (parentsList.size() != pubSortOrder.size()) {
         pubClickedName = clickedName;
-        std::vector<std::string> sortOrder(pubSortOrder.begin(), pubSortOrder.begin()+parentsList.size()+1);
-        std::vector<std::pair <std::string, int>> list =
-                pubdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(PUBLICATIONS), getFilterEndChar(PUBLICATIONS));
-        std::vector<std::pair <std::string, double>> chartList;
+        std::vector<std::string> sortOrder(pubSortOrder.begin(), pubSortOrder.begin() + parentsList.size() + 1);
+        std::vector<std::pair <std::string, int> > list =
+            pubdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(PUBLICATIONS), getFilterEndChar(PUBLICATIONS));
+        std::vector<std::pair <std::string, double> > chartList;
         for (int i = 0; i < (int) list.size(); i++) {
             chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
         }
@@ -1291,9 +1318,9 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
 
             setupPieChart(ui->pubPieChart, ui->pubPieList, chartList);
 
-            if (parentsList.size()>1) {
+            if (parentsList.size() > 1) {
                 ui->pubGraphTitle->setText("Total " + clickedName + " Publications by " +
-                                           QString::fromStdString(pubSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
+                    QString::fromStdString(pubSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
             } else {
                 ui->pubGraphTitle->setText("Total Publications by " + QString::fromStdString(parentsList[0]));
             }
@@ -1308,14 +1335,14 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
 
 void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
     QString clickedName = index.data(Qt::DisplayRole).toString();
-    if (clickedName==presClickedName || index.column()!=0) { return;}
+    if (clickedName == presClickedName || index.column() != 0) { return; }
 
     std::vector<std::string> parentsList;
     QModelIndex current = index;
     QString name;
     while (true) {
         name = current.data(Qt::DisplayRole).toString();
-        if(name!="") {
+        if(name != "") {
             auto it = parentsList.begin();
             it = parentsList.insert(it, name.toStdString());
         } else {
@@ -1324,12 +1351,12 @@ void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
         current = current.parent();
     }
 
-    if (parentsList.size()!=presSortOrder.size()) {
+    if (parentsList.size() != presSortOrder.size()) {
         presClickedName = clickedName;
-        std::vector<std::string> sortOrder(presSortOrder.begin(), presSortOrder.begin()+parentsList.size()+1);
-        std::vector<std::pair <std::string, int>> list =
-                presdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(PRESENTATIONS), getFilterEndChar(PRESENTATIONS));
-        std::vector<std::pair <std::string, double>> chartList;
+        std::vector<std::string> sortOrder(presSortOrder.begin(), presSortOrder.begin() + parentsList.size() + 1);
+        std::vector<std::pair <std::string, int> > list =
+            presdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(PRESENTATIONS), getFilterEndChar(PRESENTATIONS));
+        std::vector<std::pair <std::string, double> > chartList;
         for (int i = 0; i < (int) list.size(); i++) {
             chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
         }
@@ -1341,9 +1368,9 @@ void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
 
             setupPieChart(ui->presPieChart, ui->presPieList, chartList);
 
-            if (parentsList.size()>1) {
+            if (parentsList.size() > 1) {
                 ui->presGraphTitle->setText("Total " + clickedName + " Presentations by " +
-                                            QString::fromStdString(presSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
+                    QString::fromStdString(presSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
             } else {
                 ui->presGraphTitle->setText("Total Presentations by " + QString::fromStdString(parentsList[0]));
             }
@@ -1358,14 +1385,14 @@ void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
 
 void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
     QString clickedName = index.data(Qt::DisplayRole).toString();
-    if (clickedName==fundClickedName || index.column()!=0) { return;}
+    if (clickedName == fundClickedName || index.column() != 0) { return; }
 
     std::vector<std::string> parentsList;
     QModelIndex current = index;
     QString name;
     while (true) {
         name = current.data(Qt::DisplayRole).toString();
-        if(name!="") {
+        if(name != "") {
             auto it = parentsList.begin();
             it = parentsList.insert(it, name.toStdString());
         } else {
@@ -1374,12 +1401,12 @@ void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
         current = current.parent();
     }
 
-    if (parentsList.size()!=fundSortOrder.size()) {
+    if (parentsList.size() != fundSortOrder.size()) {
         if (clickedName != fundClickedName) {
             fundClickedName = clickedName;
-            std::vector<std::string> sortOrder(fundSortOrder.begin(), fundSortOrder.begin()+parentsList.size()+1);
-            std::vector<std::pair <std::string, double>> chartList =
-                    funddb->getTotalsTuple(yearStart, yearEnd, sortOrder, parentsList, "Total Amount", getFilterStartChar(FUNDING), getFilterEndChar(FUNDING));
+            std::vector<std::string> sortOrder(fundSortOrder.begin(), fundSortOrder.begin() + parentsList.size() + 1);
+            std::vector<std::pair <std::string, double> > chartList =
+                funddb->getTotalsTuple(yearStart, yearEnd, sortOrder, parentsList, "Total Amount", getFilterStartChar(FUNDING), getFilterEndChar(FUNDING));
 
             if (!chartList.empty()) {
                 ui->fundBarChart->clearPlottables();
@@ -1388,9 +1415,9 @@ void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
 
                 setupPieChart(ui->fundPieChart, ui->fundPieList, chartList);
 
-                if (parentsList.size()>1) {
+                if (parentsList.size() > 1) {
                     ui->fundGraphTitle->setText("Total " + clickedName + " Grants & Funding by " +
-                                                QString::fromStdString(fundSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
+                        QString::fromStdString(fundSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
                 } else {
                     ui->fundGraphTitle->setText("Total Grants & Funding by " + QString::fromStdString(parentsList[0]));
                 }
@@ -1447,8 +1474,8 @@ void MainWindow::on_pubPrintButton_clicked()
 void MainWindow::on_teachExportButton_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export File"),
-                                                    QDir::homePath(),
-                                                    tr("PDF (*.pdf)"));
+            QDir::homePath(),
+            tr("PDF (*.pdf)"));
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
@@ -1457,9 +1484,9 @@ void MainWindow::on_teachExportButton_clicked()
         painter.scale(10.0, 10.0);
         ui->teachChartFrame->render(&painter);
         /* Another option for bar chart since it is QCustom plot
-        if (ui->teach_bar_button->isChecked()) {
+           if (ui->teach_bar_button->isChecked()) {
             ui->teachBarChart->savePdf(fileName);
-        } */
+           } */
     }
 
 }
@@ -1467,8 +1494,8 @@ void MainWindow::on_teachExportButton_clicked()
 void MainWindow::on_fundExportButton_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export File"),
-                                                    QDir::homePath(),
-                                                    tr("PDF (*.pdf)"));
+            QDir::homePath(),
+            tr("PDF (*.pdf)"));
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
@@ -1482,8 +1509,8 @@ void MainWindow::on_fundExportButton_clicked()
 void MainWindow::on_presExportButton_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export File"),
-                                                    QDir::homePath(),
-                                                    tr("PDF (*.pdf)"));
+            QDir::homePath(),
+            tr("PDF (*.pdf)"));
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
@@ -1497,8 +1524,8 @@ void MainWindow::on_presExportButton_clicked()
 void MainWindow::on_pubExportButton_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Export File"),
-                                                    QDir::homePath(),
-                                                    tr("PDF (*.pdf)"));
+            QDir::homePath(),
+            tr("PDF (*.pdf)"));
     if (fileName.contains("") != 0) {
         QPdfWriter writer(fileName);
         writer.setPageOrientation(QPageLayout::Landscape);
@@ -1575,11 +1602,27 @@ char MainWindow::getFilterEndChar(int type) {
     }
 }
 
-void MainWindow::on_teach_filter_from_textChanged() { refresh(TEACH);}
-void MainWindow::on_teach_filter_to_textChanged() { refresh(TEACH);}
-void MainWindow::on_pub_filter_from_textChanged() { refresh(PUBLICATIONS);}
-void MainWindow::on_pub_filter_to_textChanged() { refresh(PUBLICATIONS);}
-void MainWindow::on_pres_filter_from_textChanged() { refresh(PRESENTATIONS);}
-void MainWindow::on_pres_filter_to_textChanged() { refresh(PRESENTATIONS);}
-void MainWindow::on_fund_filter_from_textChanged() { refresh(FUNDING);}
-void MainWindow::on_fund_filter_to_textChanged() { refresh(FUNDING);}
+void MainWindow::on_teach_filter_from_textChanged() {
+    refresh(TEACH);
+}
+void MainWindow::on_teach_filter_to_textChanged() {
+    refresh(TEACH);
+}
+void MainWindow::on_pub_filter_from_textChanged() {
+    refresh(PUBLICATIONS);
+}
+void MainWindow::on_pub_filter_to_textChanged() {
+    refresh(PUBLICATIONS);
+}
+void MainWindow::on_pres_filter_from_textChanged() {
+    refresh(PRESENTATIONS);
+}
+void MainWindow::on_pres_filter_to_textChanged() {
+    refresh(PRESENTATIONS);
+}
+void MainWindow::on_fund_filter_from_textChanged() {
+    refresh(FUNDING);
+}
+void MainWindow::on_fund_filter_to_textChanged() {
+    refresh(FUNDING);
+}
