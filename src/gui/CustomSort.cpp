@@ -25,9 +25,9 @@ void CustomSort::setFields(const std::vector<std::string> &headers) {
     fieldBoxes << ui->field_6;
 
     // hide unnessary field boxes
-    for (int i = numFields; i < fieldBoxes.size(); i++) {
-        fieldBoxes[i]->setHidden(true);
-    }
+    // for (int i = numFields; i < fieldBoxes.size(); i++) {
+    //     fieldBoxes[i]->setHidden(true);
+    // }
 
     // add items to field_1 drop down list
     for (int i = 0; i < (int) headers.size(); i++) {
@@ -35,7 +35,7 @@ void CustomSort::setFields(const std::vector<std::string> &headers) {
     }
 }
 
-QStringList CustomSort::getSortFields() {   
+QStringList CustomSort::getSortFields() {
     return sortFields;
 }
 
