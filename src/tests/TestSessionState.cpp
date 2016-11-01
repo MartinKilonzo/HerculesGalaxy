@@ -77,7 +77,7 @@ void TestSessionState::testMultipleStaggeredFileLoad() {
             flag = false;
             break;
         }
-        else if (filePath != "") {
+        else if (filePath.count() != 0) {
             flag = false;
             break;
         }
@@ -92,5 +92,37 @@ void TestSessionState::testSaveToMissingFile() {
 
 void TestSessionState::testLoadFromMissingFile() {
     SessionState session = SessionState("../Project Information/TestData/missingTestFile.dat");
-    QVERIFY(!session.save_session_state());
+    QVERIFY(session.load_session_state());
+}
+
+/* Date Range Saving and Loading */
+void TestSessionState::testDateRangeSave() {
+    SessionState session = SessionState("../Project Information/TestData/testDate.bat");
+    QDate startDate = QDate(2014, 2, 7);
+    QDate endDate = QDate(2016, 1, 13);
+    session.save_start_date(startDate);
+    session.save_end_date(endDate);
+    QVERIFY(session.save_session_state());
+}
+void TestSessionState::testDateRangeLoad() {
+    SessionState session = SessionState("../Project Information/TestData/testDate.bat");
+    session.load_session_state();
+    QDate startDate = session.load_start_date();
+    QDate endDate = session.load_end_date();
+    bool flag = false;
+    if (startDate == QDate(2014, 2, 7) && endDate == QDate(2016, 1, 13)) flag = true;
+    QVERIFY(flag);
+}
+void TestSessionState::testMissingDateRangeSave() {
+  SessionState session = SessionState("../Project Information/TestData/missingTestDate.bat");
+  QVERIFY(session.save_session_state());
+}
+void TestSessionState::testMissingDateRangeLoad() {
+  SessionState session = SessionState("../Project Information/TestData/missingTestDate.bat");
+  session.load_session_state();
+  QDate startDate = session.load_start_date();
+  QDate endDate = session.load_end_date();
+  bool flag = false;
+  if (startDate == QDate(1950, 1, 1) && endDate == QDate::currentDate()) flag = true;
+  QVERIFY(flag);
 }

@@ -8,19 +8,22 @@
 #include "tests/TestCSVReader.h"
 #include "tests/TestRecordsManager.h"
 #include "tests/TestGraph.h"
+#include "tests/TestSessionState.h"
 
 using namespace std;
 
 int main(int argc, char *argv[]) {
-  int test = 0;     /* test off */
+  int test = 1;     /* test off */
 
   if (test) {
-    TestGraph *testGraph = new TestGraph();
-    QTest::qExec(testGraph);
-    TestCSVReader *testCSVReader = new TestCSVReader();
-    QTest::qExec(testCSVReader);
-    TestRecordsManager *testRecordsManager = new TestRecordsManager();
-    QTest::qExec(testRecordsManager);
+//    TestGraph *testGraph = new TestGraph();
+//    QTest::qExec(testGraph);
+//    TestCSVReader *testCSVReader = new TestCSVReader();
+//    QTest::qExec(testCSVReader);
+//    TestRecordsManager *testRecordsManager = new TestRecordsManager();
+//    QTest::qExec(testRecordsManager);
+    TestSessionState *testSessionState = new TestSessionState();
+    QTest::qExec(testSessionState);
   }
   else {
     QApplication app(argc, argv);

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QDate>
 #include <QTest>
 
 #include "gui/SessionState.h"
@@ -24,6 +25,12 @@ private slots:
         void testMultipleStaggeredFileLoad();
         void testSaveToMissingFile();
         void testLoadFromMissingFile();
+
+        /* Date Range Saving and Loading */
+        void testDateRangeSave();
+        void testDateRangeLoad();
+        void testMissingDateRangeSave();
+        void testMissingDateRangeLoad();
 };
 
 #endif // TESTSESSIONSTATE_H
