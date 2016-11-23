@@ -55,6 +55,9 @@ void CSVReader::loadCSV(std::string file_name) {
         setHeaders = true;
         headers = line;
       } else {
+          while (line.size() < headers.size()) {
+              line.push_back("");
+          }
         all_data.push_back( line );
       }
       pos++;
