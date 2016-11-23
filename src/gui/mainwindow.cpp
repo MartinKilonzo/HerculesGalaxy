@@ -752,6 +752,158 @@ void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std
     yLabels->setData(ticks, count);
 }
 
+void MainWindow::setupLinChart(QCustomPlot *linChart, std::vector<std::pair <std::string, double>> linChartList) {
+    // create empty bar chart objects:
+    QCPGraph *yLabels = new QCPGraph(linChart->yAxis, linChart->xAxis);
+    linChart->addPlottable(yLabels);
+
+    // set names and colors:
+    QPen pen;
+    linChart->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+    yLabels->setName("Type");
+    pen.setColor(QColor(255, 131, 0));
+    yLabels->setPen(pen);
+    yLabels->setBrush(QColor(0, 0, 0, 0));
+
+    //get label list
+    int barSize = (int) linChartList.size();
+    double maxCount = 0;
+    double scaledCount;
+    QVector<double> ticks;
+    QVector<QString> ylabels;
+    QVector<double> count;
+
+    //add label list to y axis labels
+    for (int i = 0; i < barSize; i++){
+        ticks << (i+1);
+        ylabels << QString::fromStdString(linChartList[i].first);
+        if (linChartList[i].second>1000000){
+            scaledCount = linChartList[i].second/1000000;
+        } else if (linChartList[i].second>1000){
+            scaledCount = linChartList[i].second/1000;
+        } else{
+            scaledCount = linChartList[i].second;
+        }
+        count <<scaledCount;
+
+        if (maxCount < linChartList[i].second)
+            maxCount = linChartList[i].second;
+    }
+
+    //setup Y Axis
+    linChart->yAxis->setAutoTicks(false);
+    linChart->yAxis->setAutoTickLabels(false);
+    linChart->yAxis->setTickVector(ticks);
+    linChart->yAxis->setTickVectorLabels(ylabels);
+    linChart->yAxis->setTickLabelPadding(1);
+    linChart->yAxis->setSubTickCount(0);
+    linChart->yAxis->setTickLength(0, 1);
+    linChart->yAxis->grid()->setVisible(true);
+    linChart->yAxis->setRange(0, barSize+1);
+
+    if(maxCount>1000000){
+        maxCount = maxCount/1000000;
+        linChart->xAxis->setLabel("Total (in Millions)");
+    }else if (maxCount>1000){
+        maxCount = maxCount/1000;
+        linChart->xAxis->setLabel("Total (in Thousands)");
+    }else{
+        linChart->xAxis->setLabel("Total");
+    }
+
+    // setup X Axis
+    linChart->xAxis->setAutoTicks(true);
+    linChart->xAxis->setRange(0,maxCount+(maxCount*.05));
+    linChart->xAxis->setAutoTickLabels(true);
+    linChart->xAxis->setAutoTickStep(true);
+    linChart->xAxis->grid()->setSubGridVisible(true);
+
+    QPen gridPen;
+    gridPen.setStyle(Qt::SolidLine);
+    gridPen.setColor(QColor(0, 0, 0, 25));
+    linChart->xAxis->grid()->setPen(gridPen);
+    gridPen.setStyle(Qt::DotLine);
+    linChart->xAxis->grid()->setSubGridPen(gridPen);
+
+    yLabels->setData(ticks, count);
+}
+
+void MainWindow::setupScatterChart(QCustomPlot *hisChart, std::vector<std::pair <std::string, double>> hisChartList) {
+    // create empty graph objects:
+    QCPGraph *yLabels = new QCPGraph(hisChart->yAxis, hisChart->xAxis);
+    hisChart->addPlottable(yLabels);
+
+    // set names and colors:
+    QPen pen;
+    hisChart->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+    hisChart->graph()->setLineStyle(QCPGraph::lsNone);
+    yLabels->setName("Type");
+    pen.setColor(QColor(255, 131, 0));
+    yLabels->setPen(pen);
+    yLabels->setBrush(QColor(0, 0, 0, 0));
+
+    //get label list
+    int barSize = (int) hisChartList.size();
+    double maxCount = 0;
+    double scaledCount;
+    QVector<double> ticks;
+    QVector<QString> ylabels;
+    QVector<double> count;
+
+    //add label list to y axis labels
+    for (int i = 0; i < barSize; i++){
+        ticks << (i+1);
+        ylabels << QString::fromStdString(hisChartList[i].first);
+        if (hisChartList[i].second>1000000){
+            scaledCount = hisChartList[i].second/1000000;
+        } else if (hisChartList[i].second>1000){
+            scaledCount = hisChartList[i].second/1000;
+        } else{
+            scaledCount = hisChartList[i].second;
+        }
+        count <<scaledCount;
+
+        if (maxCount < hisChartList[i].second)
+            maxCount = hisChartList[i].second;
+    }
+
+    //setup Y Axis
+    hisChart->yAxis->setAutoTicks(false);
+    hisChart->yAxis->setAutoTickLabels(false);
+    hisChart->yAxis->setTickVector(ticks);
+    hisChart->yAxis->setTickVectorLabels(ylabels);
+    hisChart->yAxis->setTickLabelPadding(1);
+    hisChart->yAxis->setSubTickCount(0);
+    hisChart->yAxis->setTickLength(0, 1);
+    hisChart->yAxis->grid()->setVisible(true);
+    hisChart->yAxis->setRange(0, barSize+1);
+
+    if(maxCount>1000000){
+        maxCount = maxCount/1000000;
+        hisChart->xAxis->setLabel("Total (in Millions)");
+    }else if (maxCount>1000){
+        maxCount = maxCount/1000;
+        hisChart->xAxis->setLabel("Total (in Thousands)");
+    }else{
+        hisChart->xAxis->setLabel("Total");
+    }
+
+    // setup X Axis
+    hisChart->xAxis->setAutoTicks(true);
+    hisChart->xAxis->setRange(0,maxCount+(maxCount*.05));
+    hisChart->xAxis->setAutoTickLabels(true);
+    hisChart->xAxis->setAutoTickStep(true);
+    hisChart->xAxis->grid()->setSubGridVisible(true);
+
+    QPen gridPen;
+    gridPen.setStyle(Qt::DotLine);
+    gridPen.setColor(QColor(0, 0, 0, 25));
+    hisChart->xAxis->grid()->setPen(gridPen);
+    gridPen.setStyle(Qt::DotLine);
+    hisChart->xAxis->grid()->setSubGridPen(gridPen);
+
+    yLabels->setData(ticks, count);
+}
 
 void MainWindow::on_teach_new_sort_clicked() {
     if (teachdb != NULL) {
@@ -996,6 +1148,8 @@ bool MainWindow::load_teach(QString path, bool multi_file) {
         ui->teach_filter_to->setEnabled(true);
         ui->teach_pie_button->setEnabled(true);
         ui->teach_bar_button->setEnabled(true);
+        ui->teach_line_button->setEnabled(true);
+        ui->teach_histogram_button->setEnabled(true);
         ui->teach_to_label->setEnabled(true);
         ui->teach_sort_label->setEnabled(true);
         ui->teach_filter->setEnabled(true);
@@ -1050,6 +1204,8 @@ bool MainWindow::load_pub(QString path, bool multi_file) {
         ui->pub_filter_to->setEnabled(true);
         ui->pub_pie_button->setEnabled(true);
         ui->pub_bar_button->setEnabled(true);
+        ui->pub_line_button->setEnabled(true);
+        ui->pub_histogram_button->setEnabled(true);
         ui->pub_to_label->setEnabled(true);
         ui->pub_sort_label->setEnabled(true);
         ui->pub_filter->setEnabled(true);
@@ -1104,6 +1260,8 @@ bool MainWindow::load_pres(QString path, bool multi_file) {
         ui->pres_filter_to->setEnabled(true);
         ui->pres_pie_button->setEnabled(true);
         ui->pres_bar_button->setEnabled(true);
+        ui->pres_line_button->setEnabled(true);
+        ui->pres_histogram_button->setEnabled(true);
         ui->pres_to_label->setEnabled(true);
         ui->pres_sort_label->setEnabled(true);
         ui->pres_filter->setEnabled(true);
@@ -1158,6 +1316,8 @@ bool MainWindow::load_fund(QString path, bool multi_file) {
         ui->fund_filter_to->setEnabled(true);
         ui->fund_pie_button->setEnabled(true);
         ui->fund_bar_button->setEnabled(true);
+        ui->fund_line_button->setEnabled(true);
+        ui->fund_histogram_button->setEnabled(true);
         ui->fund_to_label->setEnabled(true);
         ui->fund_sort_label->setEnabled(true);
         ui->fund_filter->setEnabled(true);
@@ -1268,7 +1428,15 @@ void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
 
             setupPieChart(ui->teachPieChart, ui->teachPieList, chartList);
 
-            if (parentsList.size() > 1) {
+            ui->teachLineGraph->clearPlottables();
+            setupLinChart(ui->teachLineGraph, chartList);
+            ui->teachLineGraph->replot();
+
+            ui->teachHistogram->clearPlottables();
+            setupScatterChart(ui->teachHistogram, chartList);
+            ui->teachHistogram->replot();
+
+            if (parentsList.size()>1) {
                 ui->teachGraphTitle->setText("Total " + clickedName + " Teaching by " +
                     QString::fromStdString(teachSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
             } else {
@@ -1318,7 +1486,15 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
 
             setupPieChart(ui->pubPieChart, ui->pubPieList, chartList);
 
-            if (parentsList.size() > 1) {
+            ui->pubLineGraph->clearPlottables();
+            setupLinChart(ui->pubLineGraph, chartList);
+            ui->pubLineGraph->replot();
+
+            ui->pubHistogram->clearPlottables();
+            setupScatterChart(ui->pubHistogram, chartList);
+            ui->pubHistogram->replot();
+
+            if (parentsList.size()>1) {
                 ui->pubGraphTitle->setText("Total " + clickedName + " Publications by " +
                     QString::fromStdString(pubSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
             } else {
@@ -1367,8 +1543,16 @@ void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
             ui->presBarChart->replot();
 
             setupPieChart(ui->presPieChart, ui->presPieList, chartList);
+            ui->presLineGraph->clearPlottables();
+            setupLinChart(ui->presLineGraph, chartList);
+            ui->presLineGraph->replot();
 
-            if (parentsList.size() > 1) {
+            ui->presHistogram->clearPlottables();
+            setupScatterChart(ui->presHistogram, chartList);
+            ui->presHistogram->replot();
+
+            if (parentsList.size()>1) {
+
                 ui->presGraphTitle->setText("Total " + clickedName + " Presentations by " +
                     QString::fromStdString(presSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
             } else {
@@ -1415,7 +1599,15 @@ void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
 
                 setupPieChart(ui->fundPieChart, ui->fundPieList, chartList);
 
-                if (parentsList.size() > 1) {
+                ui->fundListGraph->clearPlottables();
+                setupLinChart(ui->fundListGraph, chartList);
+                ui->fundListGraph->replot();
+
+                ui->fundHistogram->clearPlottables();
+                setupScatterChart(ui->fundHistogram, chartList);
+                ui->fundHistogram->replot();
+
+                if (parentsList.size()>1) {
                     ui->fundGraphTitle->setText("Total " + clickedName + " Grants & Funding by " +
                         QString::fromStdString(fundSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
                 } else {
@@ -1601,28 +1793,51 @@ char MainWindow::getFilterEndChar(int type) {
         return 'Z';
     }
 }
+void MainWindow::on_teach_filter_from_textChanged() { refresh(TEACH);}
+void MainWindow::on_teach_filter_to_textChanged() { refresh(TEACH);}
+void MainWindow::on_pub_filter_from_textChanged() { refresh(PUBLICATIONS);}
+void MainWindow::on_pub_filter_to_textChanged() { refresh(PUBLICATIONS);}
+void MainWindow::on_pres_filter_from_textChanged() { refresh(PRESENTATIONS);}
+void MainWindow::on_pres_filter_to_textChanged() { refresh(PRESENTATIONS);}
+void MainWindow::on_fund_filter_from_textChanged() { refresh(FUNDING);}
+void MainWindow::on_fund_filter_to_textChanged() { refresh(FUNDING);}
 
-void MainWindow::on_teach_filter_from_textChanged() {
-    refresh(TEACH);
+void MainWindow::on_teach_line_button_clicked()
+{
+    ui->teach_graph_stackedWidget->setCurrentIndex(2);
 }
-void MainWindow::on_teach_filter_to_textChanged() {
-    refresh(TEACH);
+
+void MainWindow::on_pub_line_button_clicked()
+{
+    ui->pub_graph_stackedWidget->setCurrentIndex(2);
 }
-void MainWindow::on_pub_filter_from_textChanged() {
-    refresh(PUBLICATIONS);
+
+void MainWindow::on_pres_line_button_clicked()
+{
+    ui->pres_graph_stackedWidget->setCurrentIndex(2);
 }
-void MainWindow::on_pub_filter_to_textChanged() {
-    refresh(PUBLICATIONS);
+
+void MainWindow::on_fund_line_button_clicked()
+{
+    ui->fund_graph_stackedWidget->setCurrentIndex(2);
 }
-void MainWindow::on_pres_filter_from_textChanged() {
-    refresh(PRESENTATIONS);
+
+void MainWindow::on_teach_histogram_button_clicked()
+{
+    ui->teach_graph_stackedWidget->setCurrentIndex(3);
 }
-void MainWindow::on_pres_filter_to_textChanged() {
-    refresh(PRESENTATIONS);
+
+void MainWindow::on_pub_histogram_button_clicked()
+{
+    ui->pub_graph_stackedWidget->setCurrentIndex(3);
 }
-void MainWindow::on_fund_filter_from_textChanged() {
-    refresh(FUNDING);
+
+void MainWindow::on_pres_histogram_button_clicked()
+{
+    ui->pres_graph_stackedWidget->setCurrentIndex(3);
 }
-void MainWindow::on_fund_filter_to_textChanged() {
-    refresh(FUNDING);
+
+void MainWindow::on_fund_histogram_button_clicked()
+{
+    ui->fund_graph_stackedWidget->setCurrentIndex(3);
 }
