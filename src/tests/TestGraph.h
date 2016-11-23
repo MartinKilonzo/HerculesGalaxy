@@ -7,5 +7,6 @@ class TestGraph: public QObject
 {
     Q_OBJECT
 private slots:
-    void testGraph();
+    void testGraphLegacy();
+    void testGraphNew();
 };
