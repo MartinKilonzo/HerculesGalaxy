@@ -19,9 +19,9 @@
  * are discarded.
  */
 ErrorEditDialog::ErrorEditDialog(QWidget *parent,
-                                 std::vector<std::vector<std::string>*>& errors,
-                                 std::vector<std::string>& headers,
-                                 std::vector<std::string>& mandatory) :
+    std::vector<std::vector<std::string>*>& errors,
+    std::vector<std::string>& headers,
+    std::vector<std::string>& mandatory) :
     QDialog(parent, Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
     errorList(errors),
     headerList(headers),
@@ -38,6 +38,7 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
     }
 
     ui->tableWidget->setHorizontalHeaderLabels(listHeaders);
+    bool firstSelected = false;
     QTableWidgetItem* item;
     QBrush brush(QColor(255, 0, 0, 100));
     std::vector<std::vector<std::string>*>::iterator it;
@@ -50,9 +51,19 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
             item->setText((*it)->at(col).c_str());
             for (int i = 0; i < (int) mandatory.size(); i++) {
                 if (mandatory[i].compare(headers.at(col)) == 0
-                        && (*it)->at(col).compare("") == 0) {
+                    && (*it)->at(col).compare("") == 0) {
                     item->setBackground(brush);
                     item->setFlags(flag);
+                    cRow.push_back(row);
+                    cCol.push_back(col);
+                    if (!firstSelected) {
+                        cIndex = 0;
+                        QTableWidgetSelectionRange range = QTableWidgetSelectionRange(cRow.back(), cCol.back(), cRow.back(), cCol.back());
+                        cout << "set row: " << cRow.back() << " set col: " << cCol.back() << endl;
+                        ui->tableWidget->setRangeSelected(range, true);
+                        // item->setSelected(true);
+                        firstSelected = true;
+                    }
                 }
             }
             ui->tableWidget->setItem(row, col, item);
@@ -66,7 +77,7 @@ ErrorEditDialog::~ErrorEditDialog()
 {
     for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
         for (int j = 0; j < ui->tableWidget->columnCount(); j++) {
-            delete ui->tableWidget->item(i,j);
+            delete ui->tableWidget->item(i, j);
         }
     }
     delete ui;
@@ -76,7 +87,7 @@ ErrorEditDialog::~ErrorEditDialog()
 void ErrorEditDialog::saveData() {
     for (int row = 0; row < ui->tableWidget->rowCount(); row++) {
         for (int col = 0; col < ui->tableWidget->columnCount() && col < (int) errorList[row]->size(); col++) {
-            std::vector<std::string>::iterator it = errorList[row]->begin()+col;
+            std::vector<std::string>::iterator it = errorList[row]->begin() + col;
             if (errorList[row]->at(col).compare("") == 0) {
                 it = errorList[row]->erase(it);
                 errorList[row]->insert(it, ui->tableWidget->item(row, col)->text().toStdString());
@@ -109,4 +120,36 @@ void ErrorEditDialog::on_save_clicked()
 void ErrorEditDialog::on_cancel_clicked()
 {
     reject();
+}
+
+void ErrorEditDialog::on_previous_clicked()
+{
+  // Un-highlight the last selection
+  QTableWidgetSelectionRange oldRange = QTableWidgetSelectionRange(cRow[cIndex], cCol[cIndex], cRow[cIndex], cCol[cIndex]);
+  ui->tableWidget->setRangeSelected(oldRange, false);
+
+  // Move the index to the previous error cell, treating the list as a circular array
+  if (cIndex + 1 < cRow.size()) cIndex--;
+  else cIndex = cRow.size() - 1;;
+
+  // Highlight the previous selection
+  QTableWidgetSelectionRange range = QTableWidgetSelectionRange(cRow[cIndex], cCol[cIndex], cRow[cIndex], cCol[cIndex]);
+  ui->tableWidget->setRangeSelected(range, true);
+  std::cout << "Moving to: " << cRow[cIndex] << ',' << cCol[cIndex] << '\n';
+}
+
+void ErrorEditDialog::on_next_clicked()
+{
+  // Un-highlight the last selection
+  QTableWidgetSelectionRange oldRange = QTableWidgetSelectionRange(cRow[cIndex], cCol[cIndex], cRow[cIndex], cCol[cIndex]);
+  ui->tableWidget->setRangeSelected(oldRange, false);
+
+  // Move the index to the next error cell, treating the list as a circular array
+  if (cIndex + 1 < cRow.size()) cIndex++;
+  else cIndex = 0;
+
+  // Highlight the next selection
+  QTableWidgetSelectionRange range = QTableWidgetSelectionRange(cRow[cIndex], cCol[cIndex], cRow[cIndex], cCol[cIndex]);
+  ui->tableWidget->setRangeSelected(range, true);
+  std::cout << "Moving to: " << cRow[cIndex] << ',' << cCol[cIndex] << '\n';
 }

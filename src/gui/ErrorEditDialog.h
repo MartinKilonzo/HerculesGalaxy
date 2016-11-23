@@ -4,6 +4,9 @@
 #include <QDialog>
 #include <vector>
 #include <string>
+#include <iostream>
+
+using namespace std;
 
 class QAbstractButton;
 
@@ -25,12 +28,17 @@ public:
 private slots:
      void on_save_clicked();
      void on_cancel_clicked();
+     void on_previous_clicked();
+     void on_next_clicked();
 
 private:
     std::vector<std::vector<std::string>*> errorList;
     std::vector<std::string> headerList;
     std::vector<std::string> mandatoryList;
     Ui::ErrorEditDialog *ui;
+    int cIndex;
+    std::vector<int> cRow;
+    std::vector<int> cCol;
 
     void saveData();
 };
