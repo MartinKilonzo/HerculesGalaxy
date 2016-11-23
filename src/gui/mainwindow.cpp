@@ -807,14 +807,15 @@ void MainWindow::setupLinChart(QCustomPlot *linChart, std::vector<std::pair <std
     yLabels->setData(ticks, count);
 }
 
-void MainWindow::setupHisChart(QCustomPlot *hisChart, std::vector<std::pair <std::string, double>> hisChartList) {
-    // create empty bar chart objects:
+void MainWindow::setupScatterChart(QCustomPlot *hisChart, std::vector<std::pair <std::string, double>> hisChartList) {
+    // create empty graph objects:
     QCPGraph *yLabels = new QCPGraph(hisChart->yAxis, hisChart->xAxis);
     hisChart->addPlottable(yLabels);
 
     // set names and colors:
     QPen pen;
     hisChart->graph()->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssCircle, 5));
+    hisChart->graph()->setLineStyle(QCPGraph::lsNone);
     yLabels->setName("Type");
     pen.setColor(QColor(255, 131, 0));
     yLabels->setPen(pen);
@@ -874,7 +875,7 @@ void MainWindow::setupHisChart(QCustomPlot *hisChart, std::vector<std::pair <std
     hisChart->xAxis->grid()->setSubGridVisible(true);
 
     QPen gridPen;
-    gridPen.setStyle(Qt::SolidLine);
+    gridPen.setStyle(Qt::DotLine);
     gridPen.setColor(QColor(0, 0, 0, 25));
     hisChart->xAxis->grid()->setPen(gridPen);
     gridPen.setStyle(Qt::DotLine);
@@ -1372,13 +1373,12 @@ void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
 
             setupPieChart(ui->teachPieChart, ui->teachPieList, chartList);
 
-
             ui->teachLineGraph->clearPlottables();
             setupLinChart(ui->teachLineGraph, chartList);
             ui->teachLineGraph->replot();
 
             ui->teachHistogram->clearPlottables();
-            setupHisChart(ui->teachHistogram, chartList);
+            setupScatterChart(ui->teachHistogram, chartList);
             ui->teachHistogram->replot();
 
             if (parentsList.size()>1) {
@@ -1431,6 +1431,14 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
 
             setupPieChart(ui->pubPieChart, ui->pubPieList, chartList);
 
+            ui->pubLineGraph->clearPlottables();
+            setupLinChart(ui->pubLineGraph, chartList);
+            ui->pubLineGraph->replot();
+
+            ui->pubHistogram->clearPlottables();
+            setupScatterChart(ui->pubHistogram, chartList);
+            ui->pubHistogram->replot();
+
             if (parentsList.size()>1) {
                 ui->pubGraphTitle->setText("Total " + clickedName + " Publications by " +
                                            QString::fromStdString(pubSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
@@ -1481,6 +1489,14 @@ void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
 
             setupPieChart(ui->presPieChart, ui->presPieList, chartList);
 
+            ui->presLineGraph->clearPlottables();
+            setupLinChart(ui->presLineGraph, chartList);
+            ui->presLineGraph->replot();
+
+            ui->presHistogram->clearPlottables();
+            setupScatterChart(ui->presHistogram, chartList);
+            ui->presHistogram->replot();
+
             if (parentsList.size()>1) {
                 ui->presGraphTitle->setText("Total " + clickedName + " Presentations by " +
                                             QString::fromStdString(presSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
@@ -1527,6 +1543,14 @@ void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
                 ui->fundBarChart->replot();
 
                 setupPieChart(ui->fundPieChart, ui->fundPieList, chartList);
+
+                ui->fundListGraph->clearPlottables();
+                setupLinChart(ui->fundListGraph, chartList);
+                ui->fundListGraph->replot();
+
+                ui->fundHistogram->clearPlottables();
+                setupScatterChart(ui->fundHistogram, chartList);
+                ui->fundHistogram->replot();
 
                 if (parentsList.size()>1) {
                     ui->fundGraphTitle->setText("Total " + clickedName + " Grants & Funding by " +

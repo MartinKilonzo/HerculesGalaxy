@@ -157,7 +157,7 @@ private:
     void setupPieChart(PieChartWidget *pieChart, QListWidget *pieListWidget, std::vector<std::pair<std::string, double> > pieChartList);
     void setupBarChart(QCustomPlot *barChart, std::vector<std::pair<std::string, double> > barChartList);
     void setupLinChart(QCustomPlot *linChart, std::vector<std::pair<std::string, double> > linChartList);
-    void setupHisChart(QCustomPlot *hisChart, std::vector<std::pair<std::string, double> > hisChartList);
+    void setupScatterChart(QCustomPlot *hisChart, std::vector<std::pair<std::string, double> > hisChartList);
 
     bool handle_field_errors(std::vector<std::vector<std::string>*>& errors,
                              std::vector<std::string>& headers,

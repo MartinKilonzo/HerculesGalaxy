@@ -918,7 +918,7 @@ p, li { white-space: pre-wrap; }
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>Histogram</string>
+              <string>Scatter</string>
              </property>
             </widget>
            </item>
@@ -1568,7 +1568,7 @@ p, li { white-space: pre-wrap; }
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>Histogram</string>
+              <string>Scatter</string>
              </property>
             </widget>
            </item>
@@ -2218,7 +2218,7 @@ p, li { white-space: pre-wrap; }
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>Histogram</string>
+              <string>Scatter</string>
              </property>
             </widget>
            </item>
@@ -2262,7 +2262,7 @@ p, li { white-space: pre-wrap; }
                  <number>0</number>
                 </property>
                 <property name="currentIndex">
-                 <number>1</number>
+                 <number>2</number>
                 </property>
                 <widget class="QWidget" name="fund_pie_page">
                  <layout class="QGridLayout" name="gridLayout_9">
@@ -2858,7 +2858,7 @@ p, li { white-space: pre-wrap; }
               <bool>false</bool>
              </property>
              <property name="text">
-              <string>Histogram</string>
+              <string>Scatter</string>
              </property>
             </widget>
            </item>
