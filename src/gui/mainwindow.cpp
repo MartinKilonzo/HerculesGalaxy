@@ -958,6 +958,8 @@ bool MainWindow::load_teach(QString path, bool multi_file) {
         ui->teach_filter_to->setEnabled(true);
         ui->teach_pie_button->setEnabled(true);
         ui->teach_bar_button->setEnabled(true);
+        ui->teach_line_button->setEnabled(true);
+        ui->teach_histogram_button->setEnabled(true);
         ui->teach_to_label->setEnabled(true);
         ui->teach_sort_label->setEnabled(true);
         ui->teach_filter->setEnabled(true);
@@ -1009,6 +1011,8 @@ bool MainWindow::load_pub(QString path, bool multi_file) {
         ui->pub_filter_to->setEnabled(true);
         ui->pub_pie_button->setEnabled(true);
         ui->pub_bar_button->setEnabled(true);
+        ui->pub_line_button->setEnabled(true);
+        ui->pub_histogram_button->setEnabled(true);
         ui->pub_to_label->setEnabled(true);
         ui->pub_sort_label->setEnabled(true);
         ui->pub_filter->setEnabled(true);
@@ -1060,6 +1064,8 @@ bool MainWindow::load_pres(QString path, bool multi_file) {
         ui->pres_filter_to->setEnabled(true);
         ui->pres_pie_button->setEnabled(true);
         ui->pres_bar_button->setEnabled(true);
+        ui->pres_line_button->setEnabled(true);
+        ui->pres_histogram_button->setEnabled(true);
         ui->pres_to_label->setEnabled(true);
         ui->pres_sort_label->setEnabled(true);
         ui->pres_filter->setEnabled(true);
@@ -1111,6 +1117,8 @@ bool MainWindow::load_fund(QString path, bool multi_file) {
         ui->fund_filter_to->setEnabled(true);
         ui->fund_pie_button->setEnabled(true);
         ui->fund_bar_button->setEnabled(true);
+        ui->fund_line_button->setEnabled(true);
+        ui->fund_histogram_button->setEnabled(true);
         ui->fund_to_label->setEnabled(true);
         ui->fund_sort_label->setEnabled(true);
         ui->fund_filter->setEnabled(true);
@@ -1556,5 +1564,43 @@ void MainWindow::on_pres_filter_to_textChanged() { refresh(PRESENTATIONS);}
 void MainWindow::on_fund_filter_from_textChanged() { refresh(FUNDING);}
 void MainWindow::on_fund_filter_to_textChanged() { refresh(FUNDING);}
 
+void MainWindow::on_teach_line_button_clicked()
+{
+    ui->teach_graph_stackedWidget->setCurrentIndex(2);
+}
+
+void MainWindow::on_pub_line_button_clicked()
+{
+    ui->pub_graph_stackedWidget->setCurrentIndex(2);
+}
+
+void MainWindow::on_pres_line_button_clicked()
+{
+    ui->pres_graph_stackedWidget->setCurrentIndex(2);
+}
+
+void MainWindow::on_fund_line_button_clicked()
+{
+    ui->fund_graph_stackedWidget->setCurrentIndex(2);
+}
+
+void MainWindow::on_teach_histogram_button_clicked()
+{
+    ui->teach_graph_stackedWidget->setCurrentIndex(3);
+}
 
 
+void MainWindow::on_pub_histogram_button_clicked()
+{
+    ui->pub_graph_stackedWidget->setCurrentIndex(3);
+}
+
+void MainWindow::on_pres_histogram_button_clicked()
+{
+    ui->pres_graph_stackedWidget->setCurrentIndex(3);
+}
+
+void MainWindow::on_fund_histogram_button_clicked()
+{
+    ui->fund_graph_stackedWidget->setCurrentIndex(3);
+}

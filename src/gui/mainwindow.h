@@ -101,6 +101,22 @@ private slots:
 
     void on_pubExportButton_clicked();
 
+    void on_teach_line_button_clicked();
+
+    void on_pub_line_button_clicked();
+
+    void on_pres_line_button_clicked();
+
+    void on_fund_line_button_clicked();
+
+    void on_teach_histogram_button_clicked();
+
+    void on_pub_histogram_button_clicked();
+
+    void on_pres_histogram_button_clicked();
+
+    void on_fund_histogram_button_clicked();
+
 private:
     static std::vector<std::string> GRANTS_MANFIELDS, PRES_MANFIELDS, PUBS_MANFIELDS, TEACH_MANFIELDS;
 
