@@ -4,7 +4,6 @@
 #include <QTreeView>
 
 #include "gui/mainwindow.h"
-#include "tests/tests.h"
 #include "tests/TestCSVReader.h"
 #include "tests/TestRecordsManager.h"
 #include "tests/TestGraph.h"

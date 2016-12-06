@@ -47,21 +47,22 @@ ErrorEditDialog::ErrorEditDialog(QWidget *parent,
         for (int col = 0; col < (int) headers.size() && col < (int) (*it)->size(); col++) {
             item = new QTableWidgetItem();
             Qt::ItemFlags flag = item->flags();
-            item->setFlags(Qt::ItemIsSelectable);
+            // item->setFlags(Qt::ItemIsSelectable);
             item->setText((*it)->at(col).c_str());
             for (int i = 0; i < (int) mandatory.size(); i++) {
                 if (mandatory[i].compare(headers.at(col)) == 0
                     && (*it)->at(col).compare("") == 0) {
                     item->setBackground(brush);
                     item->setFlags(flag);
+                    // Store the coodrinates of the errors
                     cRow.push_back(row);
                     cCol.push_back(col);
+                    // Select the first error, if it has not been selected already
                     if (!firstSelected) {
                         cIndex = 0;
                         QTableWidgetSelectionRange range = QTableWidgetSelectionRange(cRow.back(), cCol.back(), cRow.back(), cCol.back());
                         cout << "set row: " << cRow.back() << " set col: " << cCol.back() << endl;
                         ui->tableWidget->setRangeSelected(range, true);
-                        // item->setSelected(true);
                         firstSelected = true;
                     }
                 }
@@ -88,10 +89,10 @@ void ErrorEditDialog::saveData() {
     for (int row = 0; row < ui->tableWidget->rowCount(); row++) {
         for (int col = 0; col < ui->tableWidget->columnCount() && col < (int) errorList[row]->size(); col++) {
             std::vector<std::string>::iterator it = errorList[row]->begin() + col;
-            if (errorList[row]->at(col).compare("") == 0) {
+            // if (errorList[row]->at(col).compare("") == 0) {
                 it = errorList[row]->erase(it);
                 errorList[row]->insert(it, ui->tableWidget->item(row, col)->text().toStdString());
-            }
+            // }
         }
     }
     accept();
@@ -130,7 +131,7 @@ void ErrorEditDialog::on_previous_clicked()
 
   // Move the index to the previous error cell, treating the list as a circular array
   if (cIndex + 1 < cRow.size()) cIndex--;
-  else cIndex = cRow.size() - 1;;
+  else cIndex = cRow.size() - 1;
 
   // Highlight the previous selection
   QTableWidgetSelectionRange range = QTableWidgetSelectionRange(cRow[cIndex], cCol[cIndex], cRow[cIndex], cCol[cIndex]);

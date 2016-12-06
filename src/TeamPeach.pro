@@ -32,7 +32,6 @@ HEADERS += \
     datamodel/GrantFundingTreeModel.h \
     datamodel/TeachingTreeModel.h \
     gui/qcustomplot.h \
-    tests/tests.h \
     tests/TestCSVReader.h \
     tests/TestRecordsManager.h \
     tests/TestGraph.h \
@@ -55,7 +54,6 @@ SOURCES += \
     datamodel/GrantFundingTreeModel.cpp \
     datamodel/TeachingTreeModel.cpp \
     gui/qcustomplot.cpp \
-    tests/tests.cpp \
     tests/TestCSVReader.cpp \
     tests/TestRecordsManager.cpp \
     gui/SessionState.cpp \
