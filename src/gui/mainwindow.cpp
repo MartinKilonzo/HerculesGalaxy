@@ -752,7 +752,7 @@ void MainWindow::setupBarChart(QCustomPlot *barChart, std::vector<std::pair <std
     yLabels->setData(ticks, count);
 }
 
-void MainWindow::setupLinChart(QCustomPlot *linChart, std::vector<std::pair <std::string, double>> linChartList) {
+void MainWindow::setupLinChart(QCustomPlot *linChart, std::vector<std::pair <std::string, double> > linChartList) {
     // create empty bar chart objects:
     QCPGraph *yLabels = new QCPGraph(linChart->yAxis, linChart->xAxis);
     linChart->addPlottable(yLabels);
@@ -774,17 +774,17 @@ void MainWindow::setupLinChart(QCustomPlot *linChart, std::vector<std::pair <std
     QVector<double> count;
 
     //add label list to y axis labels
-    for (int i = 0; i < barSize; i++){
-        ticks << (i+1);
+    for (int i = 0; i < barSize; i++) {
+        ticks << (i + 1);
         ylabels << QString::fromStdString(linChartList[i].first);
-        if (linChartList[i].second>1000000){
-            scaledCount = linChartList[i].second/1000000;
-        } else if (linChartList[i].second>1000){
-            scaledCount = linChartList[i].second/1000;
+        if (linChartList[i].second > 1000000) {
+            scaledCount = linChartList[i].second / 1000000;
+        } else if (linChartList[i].second > 1000) {
+            scaledCount = linChartList[i].second / 1000;
         } else{
             scaledCount = linChartList[i].second;
         }
-        count <<scaledCount;
+        count << scaledCount;
 
         if (maxCount < linChartList[i].second)
             maxCount = linChartList[i].second;
@@ -799,13 +799,13 @@ void MainWindow::setupLinChart(QCustomPlot *linChart, std::vector<std::pair <std
     linChart->yAxis->setSubTickCount(0);
     linChart->yAxis->setTickLength(0, 1);
     linChart->yAxis->grid()->setVisible(true);
-    linChart->yAxis->setRange(0, barSize+1);
+    linChart->yAxis->setRange(0, barSize + 1);
 
-    if(maxCount>1000000){
-        maxCount = maxCount/1000000;
+    if(maxCount > 1000000) {
+        maxCount = maxCount / 1000000;
         linChart->xAxis->setLabel("Total (in Millions)");
-    }else if (maxCount>1000){
-        maxCount = maxCount/1000;
+    }else if (maxCount > 1000) {
+        maxCount = maxCount / 1000;
         linChart->xAxis->setLabel("Total (in Thousands)");
     }else{
         linChart->xAxis->setLabel("Total");
@@ -813,7 +813,7 @@ void MainWindow::setupLinChart(QCustomPlot *linChart, std::vector<std::pair <std
 
     // setup X Axis
     linChart->xAxis->setAutoTicks(true);
-    linChart->xAxis->setRange(0,maxCount+(maxCount*.05));
+    linChart->xAxis->setRange(0, maxCount + (maxCount * .05));
     linChart->xAxis->setAutoTickLabels(true);
     linChart->xAxis->setAutoTickStep(true);
     linChart->xAxis->grid()->setSubGridVisible(true);
@@ -828,7 +828,7 @@ void MainWindow::setupLinChart(QCustomPlot *linChart, std::vector<std::pair <std
     yLabels->setData(ticks, count);
 }
 
-void MainWindow::setupScatterChart(QCustomPlot *hisChart, std::vector<std::pair <std::string, double>> hisChartList) {
+void MainWindow::setupScatterChart(QCustomPlot *hisChart, std::vector<std::pair <std::string, double> > hisChartList) {
     // create empty graph objects:
     QCPGraph *yLabels = new QCPGraph(hisChart->yAxis, hisChart->xAxis);
     hisChart->addPlottable(yLabels);
@@ -851,17 +851,17 @@ void MainWindow::setupScatterChart(QCustomPlot *hisChart, std::vector<std::pair 
     QVector<double> count;
 
     //add label list to y axis labels
-    for (int i = 0; i < barSize; i++){
-        ticks << (i+1);
+    for (int i = 0; i < barSize; i++) {
+        ticks << (i + 1);
         ylabels << QString::fromStdString(hisChartList[i].first);
-        if (hisChartList[i].second>1000000){
-            scaledCount = hisChartList[i].second/1000000;
-        } else if (hisChartList[i].second>1000){
-            scaledCount = hisChartList[i].second/1000;
+        if (hisChartList[i].second > 1000000) {
+            scaledCount = hisChartList[i].second / 1000000;
+        } else if (hisChartList[i].second > 1000) {
+            scaledCount = hisChartList[i].second / 1000;
         } else{
             scaledCount = hisChartList[i].second;
         }
-        count <<scaledCount;
+        count << scaledCount;
 
         if (maxCount < hisChartList[i].second)
             maxCount = hisChartList[i].second;
@@ -876,13 +876,13 @@ void MainWindow::setupScatterChart(QCustomPlot *hisChart, std::vector<std::pair 
     hisChart->yAxis->setSubTickCount(0);
     hisChart->yAxis->setTickLength(0, 1);
     hisChart->yAxis->grid()->setVisible(true);
-    hisChart->yAxis->setRange(0, barSize+1);
+    hisChart->yAxis->setRange(0, barSize + 1);
 
-    if(maxCount>1000000){
-        maxCount = maxCount/1000000;
+    if(maxCount > 1000000) {
+        maxCount = maxCount / 1000000;
         hisChart->xAxis->setLabel("Total (in Millions)");
-    }else if (maxCount>1000){
-        maxCount = maxCount/1000;
+    }else if (maxCount > 1000) {
+        maxCount = maxCount / 1000;
         hisChart->xAxis->setLabel("Total (in Thousands)");
     }else{
         hisChart->xAxis->setLabel("Total");
@@ -890,7 +890,7 @@ void MainWindow::setupScatterChart(QCustomPlot *hisChart, std::vector<std::pair 
 
     // setup X Axis
     hisChart->xAxis->setAutoTicks(true);
-    hisChart->xAxis->setRange(0,maxCount+(maxCount*.05));
+    hisChart->xAxis->setRange(0, maxCount + (maxCount * .05));
     hisChart->xAxis->setAutoTickLabels(true);
     hisChart->xAxis->setAutoTickStep(true);
     hisChart->xAxis->grid()->setSubGridVisible(true);
@@ -1436,7 +1436,7 @@ void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
             setupScatterChart(ui->teachHistogram, chartList);
             ui->teachHistogram->replot();
 
-            if (parentsList.size()>1) {
+            if (parentsList.size() > 1) {
                 ui->teachGraphTitle->setText("Total " + clickedName + " Teaching by " +
                     QString::fromStdString(teachSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
             } else {
@@ -1494,7 +1494,7 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
             setupScatterChart(ui->pubHistogram, chartList);
             ui->pubHistogram->replot();
 
-            if (parentsList.size()>1) {
+            if (parentsList.size() > 1) {
                 ui->pubGraphTitle->setText("Total " + clickedName + " Publications by " +
                     QString::fromStdString(pubSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
             } else {
@@ -1551,7 +1551,7 @@ void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
             setupScatterChart(ui->presHistogram, chartList);
             ui->presHistogram->replot();
 
-            if (parentsList.size()>1) {
+            if (parentsList.size() > 1) {
 
                 ui->presGraphTitle->setText("Total " + clickedName + " Presentations by " +
                     QString::fromStdString(presSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
@@ -1607,7 +1607,7 @@ void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
                 setupScatterChart(ui->fundHistogram, chartList);
                 ui->fundHistogram->replot();
 
-                if (parentsList.size()>1) {
+                if (parentsList.size() > 1) {
                     ui->fundGraphTitle->setText("Total " + clickedName + " Grants & Funding by " +
                         QString::fromStdString(fundSortOrder[parentsList.size()]) + " for " + QString::fromStdString(parentsList[0]));
                 } else {
@@ -1793,14 +1793,83 @@ char MainWindow::getFilterEndChar(int type) {
         return 'Z';
     }
 }
-void MainWindow::on_teach_filter_from_textChanged() { refresh(TEACH);}
-void MainWindow::on_teach_filter_to_textChanged() { refresh(TEACH);}
-void MainWindow::on_pub_filter_from_textChanged() { refresh(PUBLICATIONS);}
-void MainWindow::on_pub_filter_to_textChanged() { refresh(PUBLICATIONS);}
-void MainWindow::on_pres_filter_from_textChanged() { refresh(PRESENTATIONS);}
-void MainWindow::on_pres_filter_to_textChanged() { refresh(PRESENTATIONS);}
-void MainWindow::on_fund_filter_from_textChanged() { refresh(FUNDING);}
-void MainWindow::on_fund_filter_to_textChanged() { refresh(FUNDING);}
+
+
+
+std::vector<std::string> MainWindow::getFilterNames(int type) {
+    string filterNames;
+    switch (type) {
+    case FUNDING:
+        filterNames = ui->fund_filter_names->text().toStdString()[0];
+        break;
+    case PRESENTATIONS:
+        filterNames = ui->pres_filter_names->text().toStdString()[0];
+        break;
+    case PUBLICATIONS:
+        filterNames = ui->pub_filter_names->text().toStdString()[0];
+        break;
+    case TEACH:
+        filterNames = ui->teach_filter_names->text().toStdString()[0];
+        break;
+    }
+    std::cout << filterNames << '\n';
+    std::vector<std::string> nameList;
+    string name = "";
+    char last;
+    for (int i = 0; i < filterNames.length(); i++) {
+        char c = filterNames[i];
+        if (c == ',') {
+            if (name.length() > 0)
+                nameList.push_back(name);
+            name = "";
+        }
+        else if (!(c == ' ' && last == ','))
+            name += c;
+        last = c;
+    }
+
+    // for (std::vector<string>::iterator itr = filterNames.begin(); itr != filterNames.end(); itr++) {
+    //   std::cout << *itr << std::endl;
+    // }
+    return nameList;
+}
+
+void MainWindow::on_teach_filter_from_textChanged() {
+    refresh(TEACH);
+}
+void MainWindow::on_teach_filter_to_textChanged() {
+    refresh(TEACH);
+}
+void MainWindow::on_teach_filter_names_textChanged() {
+    refresh(TEACH);
+}
+void MainWindow::on_pub_filter_from_textChanged() {
+    refresh(PUBLICATIONS);
+}
+void MainWindow::on_pub_filter_to_textChanged() {
+    refresh(PUBLICATIONS);
+}
+void MainWindow::on_pub_filter_names_textChanged() {
+    refresh(PUBLICATIONS);
+}
+void MainWindow::on_pres_filter_from_textChanged() {
+    refresh(PRESENTATIONS);
+}
+void MainWindow::on_pres_filter_to_textChanged() {
+    refresh(PRESENTATIONS);
+}
+void MainWindow::on_pres_filter_names_textChanged() {
+    refresh(PRESENTATIONS);
+}
+void MainWindow::on_fund_filter_from_textChanged() {
+    refresh(FUNDING);
+}
+void MainWindow::on_fund_filter_to_textChanged() {
+    refresh(FUNDING);
+}
+void MainWindow::on_fund_filter_names_textChanged() {
+    refresh(FUNDING);
+}
 
 void MainWindow::on_teach_line_button_clicked()
 {

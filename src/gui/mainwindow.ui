@@ -236,7 +236,7 @@ p, li { white-space: pre-wrap; }
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <property name="usesScrollButtons">
           <bool>false</bool>
@@ -923,7 +923,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item row="3" column="13" colspan="2">
-            <widget class="QLineEdit" name="lineEdit_4"/>
+            <widget class="QLineEdit" name="teach_filter_names"/>
            </item>
           </layout>
          </widget>
@@ -1576,7 +1576,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item row="2" column="13" colspan="2">
-            <widget class="QLineEdit" name="lineEdit"/>
+            <widget class="QLineEdit" name="pub_filter_names"/>
            </item>
           </layout>
          </widget>
@@ -2229,7 +2229,7 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item row="2" column="13" colspan="2">
-            <widget class="QLineEdit" name="lineEdit_2"/>
+            <widget class="QLineEdit" name="pres_filter_names"/>
            </item>
           </layout>
          </widget>
@@ -2885,7 +2885,7 @@ p, li { white-space: pre-wrap; }
             </spacer>
            </item>
            <item row="2" column="13" colspan="2">
-            <widget class="QLineEdit" name="lineEdit_3"/>
+            <widget class="QLineEdit" name="fund_filter_names"/>
            </item>
           </layout>
          </widget>

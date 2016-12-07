@@ -4,6 +4,7 @@
 #include <string>
 #include <QMainWindow>
 #include <vector>
+#include <cstdio>
 
 
 class RecordsManager;
@@ -78,12 +79,16 @@ private slots:
 
     void on_teach_filter_from_textChanged();
     void on_teach_filter_to_textChanged();
+    void on_teach_filter_names_textChanged();
     void on_pub_filter_from_textChanged();
     void on_pub_filter_to_textChanged();
+    void on_pub_filter_names_textChanged();
     void on_pres_filter_from_textChanged();
     void on_pres_filter_to_textChanged();
+    void on_pres_filter_names_textChanged();
     void on_fund_filter_from_textChanged();
     void on_fund_filter_to_textChanged();
+    void on_fund_filter_names_textChanged();
 
     void on_teachPrintButton_clicked();
 
@@ -146,6 +151,7 @@ private:
     std::vector<std::string> getParentsList(QModelIndex &index);
     char getFilterStartChar(int type);
     char getFilterEndChar(int type);
+    std::vector<std::string> getFilterNames(int type);
 
     int yearStart, yearEnd;
 
