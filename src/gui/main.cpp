@@ -8,6 +8,7 @@
 #include "tests/TestRecordsManager.h"
 #include "tests/TestGraph.h"
 #include "tests/TestSessionState.h"
+#include "tests/testdivision.h"
 
 using namespace std;
 
@@ -23,6 +24,8 @@ int main(int argc, char *argv[]) {
     QTest::qExec(testRecordsManager);
     TestSessionState *testSessionState = new TestSessionState();
     QTest::qExec(testSessionState);
+    TestDivision *testDivision = new TestDivision();
+    QTest::qExec(testDivision);
   }
   else {
     QApplication app(argc, argv);

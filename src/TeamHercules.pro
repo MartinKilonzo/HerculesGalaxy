@@ -36,7 +36,8 @@ HEADERS += \
     tests/TestRecordsManager.h \
     tests/TestGraph.h \
     gui/SessionState.h \
-    tests/TestSessionState.h
+    tests/TestSessionState.h \
+    tests/TestDivision.h
 
 SOURCES += \
     gui/CustomSort.cpp \
@@ -58,7 +59,8 @@ SOURCES += \
     tests/TestRecordsManager.cpp \
     gui/SessionState.cpp \
     tests/TestGraph.cpp \
-    tests/TestSessionState.cpp
+    tests/TestSessionState.cpp \
+    tests/TestDivision.cpp
 
 FORMS += \
     gui/customsort.ui \
