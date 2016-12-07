@@ -9,8 +9,7 @@ TeachingTreeModel::TeachingTreeModel(RecordsManager* db, QObject *parent):
 TeachingTreeModel::~TeachingTreeModel() {
 }
 
-void TeachingTreeModel::setupModel(int yearStart, int yearEnd, std::vector<std::string> sortFields, char filterStart, char filterEnd) {
+void TeachingTreeModel::setupModel(int yearStart, int yearEnd, std::vector<std::string> sortFields, char filterStart, char filterEnd, std::vector<std::string> filterNames) {
     rootItem = new TreeItem(dataObj->createHeadersListForTeaching(sortFields[0]));
-    setupModelData(dataObj->createQStringForTeaching(yearStart, yearEnd, sortFields, filterStart, filterEnd).split(QString("\n")), rootItem);
+    setupModelData(dataObj->createQStringForTeaching(yearStart, yearEnd, sortFields, filterStart,  filterEnd, filterNames).split(QString("\n")), rootItem);
 }
-

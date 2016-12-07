@@ -592,7 +592,7 @@ void MainWindow::makeTree(int tabIndex) {
         currentView = ui->teachTreeView;
 
         // analyze the data into a tree
-        currentTree->setupModel(yearStart, yearEnd, teachSortOrder, getFilterStartChar(TEACH), getFilterEndChar(TEACH));
+        currentTree->setupModel(yearStart, yearEnd, teachSortOrder, getFilterStartChar(TEACH), getFilterEndChar(TEACH), getFilterNames(TEACH));
 
         ui->teach_pie_button->toggle();
 
@@ -609,7 +609,7 @@ void MainWindow::makeTree(int tabIndex) {
         currentView = ui->pubTreeView;
 
         // analyze the data into a tree
-        currentTree->setupModel(yearStart, yearEnd, pubSortOrder, getFilterStartChar(PUBLICATIONS), getFilterEndChar(PUBLICATIONS));
+        currentTree->setupModel(yearStart, yearEnd, pubSortOrder, getFilterStartChar(PUBLICATIONS), getFilterEndChar(PUBLICATIONS), getFilterNames(PUBLICATIONS));
 
         ui->pub_pie_button->toggle();
 
@@ -626,7 +626,7 @@ void MainWindow::makeTree(int tabIndex) {
         currentView = ui->presTreeView;
 
         // analyze the data into a tree
-        currentTree->setupModel(yearStart, yearEnd, presSortOrder, getFilterStartChar(PRESENTATIONS), getFilterEndChar(PRESENTATIONS));
+        currentTree->setupModel(yearStart, yearEnd, presSortOrder, getFilterStartChar(PRESENTATIONS), getFilterEndChar(PRESENTATIONS), getFilterNames(PRESENTATIONS));
 
         ui->pres_pie_button->toggle();
 
@@ -643,7 +643,7 @@ void MainWindow::makeTree(int tabIndex) {
         currentView = ui->fundTreeView;
 
         // analyze the data into a tree
-        currentTree->setupModel(yearStart, yearEnd, fundSortOrder, getFilterStartChar(FUNDING), getFilterEndChar(FUNDING));
+        currentTree->setupModel(yearStart, yearEnd, fundSortOrder, getFilterStartChar(FUNDING), getFilterEndChar(FUNDING), getFilterNames(FUNDING));
 
         ui->fund_pie_button->toggle();
 
@@ -1415,7 +1415,7 @@ void MainWindow::on_teachTreeView_clicked(const QModelIndex &index) {
         teachClickedName = clickedName;
         std::vector<std::string> sortOrder(teachSortOrder.begin(), teachSortOrder.begin() + parentsList.size() + 1);
         std::vector<std::pair <std::string, int> > list =
-            teachdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(TEACH), getFilterEndChar(TEACH));
+            teachdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(TEACH), getFilterEndChar(TEACH), getFilterNames(TEACH));
         std::vector<std::pair <std::string, double> > chartList;
         for (int i = 0; i < (int) list.size(); i++) {
             chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
@@ -1473,7 +1473,7 @@ void MainWindow::on_pubTreeView_clicked(const QModelIndex &index) {
         pubClickedName = clickedName;
         std::vector<std::string> sortOrder(pubSortOrder.begin(), pubSortOrder.begin() + parentsList.size() + 1);
         std::vector<std::pair <std::string, int> > list =
-            pubdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(PUBLICATIONS), getFilterEndChar(PUBLICATIONS));
+            pubdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(PUBLICATIONS), getFilterEndChar(PUBLICATIONS), getFilterNames(PUBLICATIONS));
         std::vector<std::pair <std::string, double> > chartList;
         for (int i = 0; i < (int) list.size(); i++) {
             chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
@@ -1531,7 +1531,7 @@ void MainWindow::on_presTreeView_clicked(const QModelIndex &index) {
         presClickedName = clickedName;
         std::vector<std::string> sortOrder(presSortOrder.begin(), presSortOrder.begin() + parentsList.size() + 1);
         std::vector<std::pair <std::string, int> > list =
-            presdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(PRESENTATIONS), getFilterEndChar(PRESENTATIONS));
+            presdb->getCountTuple(yearStart, yearEnd, sortOrder, parentsList, getFilterStartChar(PRESENTATIONS), getFilterEndChar(PRESENTATIONS), getFilterNames(PRESENTATIONS));
         std::vector<std::pair <std::string, double> > chartList;
         for (int i = 0; i < (int) list.size(); i++) {
             chartList.emplace_back(list[i].first, static_cast<double>(list[i].second));
@@ -1590,7 +1590,7 @@ void MainWindow::on_fundTreeView_clicked(const QModelIndex &index) {
             fundClickedName = clickedName;
             std::vector<std::string> sortOrder(fundSortOrder.begin(), fundSortOrder.begin() + parentsList.size() + 1);
             std::vector<std::pair <std::string, double> > chartList =
-                funddb->getTotalsTuple(yearStart, yearEnd, sortOrder, parentsList, "Total Amount", getFilterStartChar(FUNDING), getFilterEndChar(FUNDING));
+                funddb->getTotalsTuple(yearStart, yearEnd, sortOrder, parentsList, "Total Amount", getFilterStartChar(FUNDING), getFilterEndChar(FUNDING), getFilterNames(FUNDING));
 
             if (!chartList.empty()) {
                 ui->fundBarChart->clearPlottables();
@@ -1795,42 +1795,60 @@ char MainWindow::getFilterEndChar(int type) {
 }
 
 
-
+/**
+ * Helper function. Generates a list of tokens from an input string delimited by commas.
+ * Used to provide filter tokens to filter the data by Name.
+ *
+ * @param type{int}       - A number corresponding to the type
+ */
 std::vector<std::string> MainWindow::getFilterNames(int type) {
     string filterNames;
     switch (type) {
     case FUNDING:
-        filterNames = ui->fund_filter_names->text().toStdString()[0];
+        filterNames = ui->fund_filter_names->text().toStdString();
         break;
     case PRESENTATIONS:
-        filterNames = ui->pres_filter_names->text().toStdString()[0];
+        filterNames = ui->pres_filter_names->text().toStdString();
         break;
     case PUBLICATIONS:
-        filterNames = ui->pub_filter_names->text().toStdString()[0];
+        filterNames = ui->pub_filter_names->text().toStdString();
         break;
     case TEACH:
-        filterNames = ui->teach_filter_names->text().toStdString()[0];
+        filterNames = ui->teach_filter_names->text().toStdString();
         break;
     }
-    std::cout << filterNames << '\n';
+    // Create a list from the comma-delimited string:
     std::vector<std::string> nameList;
+    // Split the string into substring, name, via commas
     string name = "";
+    // Record the last character for specific edge cases
     char last;
     for (int i = 0; i < filterNames.length(); i++) {
         char c = filterNames[i];
+        // If the character is a comma, save the substring (exempting the comma)
         if (c == ',') {
-            if (name.length() > 0)
+            if (name.length() > 0) {
                 nameList.push_back(name);
+            }
+            // Reset the substring to the empty string
             name = "";
         }
-        else if (!(c == ' ' && last == ','))
+        // Otherwise, if the character is the last one, save the substring with the new character appended
+        else if ( i == filterNames.length() - 1) {
+          name += c;
+          if (name.length() > 0) {
+              nameList.push_back(name);
+          }
+          // Reset the substring to the empty string
+          name = "";
+        }
+        // Otherwise, append the character to the substring if it is any character other than a space followed by preceeded by another space or comma
+        else if (!(c == ' ' && (last != ',' || last != ' '))) {
             name += c;
+        }
+        // Save the last character
         last = c;
     }
-
-    // for (std::vector<string>::iterator itr = filterNames.begin(); itr != filterNames.end(); itr++) {
-    //   std::cout << *itr << std::endl;
-    // }
     return nameList;
 }
 
