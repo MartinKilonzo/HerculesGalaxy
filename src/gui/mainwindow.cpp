@@ -97,10 +97,10 @@ MainWindow::MainWindow(QWidget *parent) :
     dateChanged = {false, false, false, false};
 
     // Load the saved session (if it exists)
-    load_teach(session.load_file(TEACH));
-    load_pub(session.load_file(PUBLICATIONS));
-    load_pres(session.load_file(PRESENTATIONS));
     load_fund(session.load_file(FUNDING));
+    load_pres(session.load_file(PRESENTATIONS));
+    load_pub(session.load_file(PUBLICATIONS));
+    load_teach(session.load_file(TEACH));
 }
 
 MainWindow::~MainWindow() {

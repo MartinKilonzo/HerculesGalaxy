@@ -8,7 +8,7 @@
 #include "tests/TestRecordsManager.h"
 #include "tests/TestGraph.h"
 #include "tests/TestSessionState.h"
-#include "tests/testdivision.h"
+#include "tests/TestDivision.h"
 
 using namespace std;
 
