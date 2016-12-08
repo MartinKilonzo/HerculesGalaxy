@@ -1,7 +1,7 @@
 #include "TestDivision.h"
 
 void TestDivision::getDivisionTeaching() {
-    CSVReader reader("../Project Information/Sample Data/Program_Teaching_expanded.csv");
+    CSVReader reader("../Project Information/New Sample Data/Program_Teaching_expanded.csv");
     vector<string> header = reader.getHeaders();
     bool flag = false;
     int i = 0;
@@ -13,11 +13,12 @@ void TestDivision::getDivisionTeaching() {
             i++;
         }
     }
+    QVERIFY(flag);
 }
 
 void TestDivision::getDivisionGrants() {
 
-    CSVReader reader("../Project Information/Sample Data/Grants_expanded.csv");
+    CSVReader reader("../Project Information/New Sample Data/Grants_expanded.csv");
     vector<string> header = reader.getHeaders();
     bool flag = false;
     int i = 0;
@@ -29,11 +30,12 @@ void TestDivision::getDivisionGrants() {
             i++;
         }
     }
+    QVERIFY(flag);
 }
 
 void TestDivision::getDivisionPres() {
 
-    CSVReader reader("../Project Information/Sample Data/Presentations_sample.csv");
+    CSVReader reader("../Project Information/New Sample Data/Presentations_expanded.csv");
     vector<string> header = reader.getHeaders();
     bool flag = false;
     int i = 0;
@@ -45,11 +47,12 @@ void TestDivision::getDivisionPres() {
             i++;
         }
     }
+    QVERIFY(flag);
 }
 
 void TestDivision::getDivisionPubs() {
 
-    CSVReader reader("../Project Information/Sample Data/Publications_sample.csv");
+    CSVReader reader("../Project Information/New Sample Data/Publications_expanded.csv");
     vector<string> header = reader.getHeaders();
     bool flag = false;
     int i = 0;
@@ -61,4 +64,5 @@ void TestDivision::getDivisionPubs() {
             i++;
         }
     }
+    QVERIFY(flag);
 }
