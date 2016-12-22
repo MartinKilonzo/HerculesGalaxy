@@ -1,4 +1,4 @@
-# Peachy Galaxy
+# Hercules Galaxy
 
-Peachy Galaxy is a helper program used to summarize and organize data from Acuity STAR.
-Created by the members of Team Peach, it offers user-friendly tree views and various visualizations of all the data.
+Hercules Galaxy is a helper program used to summarize and organize data from Schulich's Dental Faculty's Acuity STAR database.
+This system offers user-friendly of manipulating, viewing, and vizualizing relevant data to the faculty and administrative staff of Schulich Dental School.
